@@ -22,7 +22,7 @@ Error_t AFIO_u8setInterrupt(AFIO_Cont_ISQ_Line_t Copy_u8Line,
 		Copy_u8Line  = Copy_u8Line % AFIO_u8SIZE_PIN ;
 		//clr 4bits for configuration
 		AFIO->AFIO_EXTICR[local_u8index] &=~ ((0b1111)<< Copy_u8Line*AFIO_u8SIZE_PIN) ;
-		AFIO->AFIO_EXTICR[local_u8index] |= (( Copy_u8Line&0x0f)*AFIO_u8SIZE_PIN) ;
+		AFIO->AFIO_EXTICR[local_u8index] |= (( Copy_u8Port&0x0f)<<(Copy_u8Line*AFIO_u8SIZE_PIN)) ;
 
 	}else {
 		local_u8Status = NOK ;
