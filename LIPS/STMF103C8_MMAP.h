@@ -45,9 +45,9 @@ typedef struct {
 /*********************************************************/
 /*******************NVIC Registers************************/
 /*********************************************************/
-#define NVIC_C_u32BASE_ADDRESS 0xE000E100
+#define NVIC_u32BASE_ADDRESS 0xE000E100
 #define NVIC_res 29
-#define NVIC_RES2 59
+#define NVIC_RES2 61
 #define NCIC_NVIC_IPR_SIZE 84
 #define NVIC_SIZE 3
 typedef struct {
@@ -65,19 +65,48 @@ typedef struct {
 
 	u32 NVIC_IABR[NVIC_SIZE];
 	u32 NVIC_IABR_RES[NVIC_RES2];
-    u8  NVIC_IPR [NCIC_NVIC_IPR_SIZE]  ;
+    volatile u8  NVIC_IPR [NCIC_NVIC_IPR_SIZE]  ;
 } NVIC_REG_DEF_t;
 
-#define NVIC ((NVIC_REG_DEF_t*)NVIC_C_u32BASE_ADDRESS)
+#define NVIC ((NVIC_REG_DEF_t*)NVIC_u32BASE_ADDRESS)
 /*********************************************************/
 /*******************SYS Registers************************/
 /*********************************************************/
 #define SCB_AIRCR (*(u32*)(0xE000ED00 +0x0C))
 
+/*********************************************************/
+/*******************EXTI Registers************************/
+/*********************************************************/
+
+#define EXTI_u32BASE_ADDRESS  0x40010400
+
+typedef struct {
+	u32 EXTI_IMR;
+	u32 EXTI_EMR;
+	u32 EXTI_RTSR;
+	u32 EXTI_FTSR;
+	u32 EXTI_SWIER;
+	u32 EXTI_PR;
+
+} EXTI_REG_DEF_t;
+
+#define EXTI ((EXTI_REG_DEF_t*)EXTI_u32BASE_ADDRESS)
 
 
+/*********************************************************/
+/*******************AFIO Registers************************/
+/*********************************************************/
+#define AFIO_u32BASE_ADDRESS  0x40010000
+#define AFIO_EXTICRSIZE 4
+typedef struct {
+u32 AFIO_EVCR ;
+u32 AFIO_MAPR ;
+u32 AFIO_EXTICR[AFIO_EXTICRSIZE];
+u32 AFIO_MAPR2;
+} AFIO_REG_DEF_t;
 
 
+#define AFIO ((AFIO_REG_DEF_t*)AFIO_u32BASE_ADDRESS)
 
 
-#endif //_STMF103C8_MMAP_H_  
+#endif //_STMF103C8_MMAP_H_

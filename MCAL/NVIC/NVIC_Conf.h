@@ -13,5 +13,5 @@
  * SCB_G_NONE_SUP_16       None                          16   - 5
  * */
 //**********************************************************
-#define NVIC_PR_OPTIONS  5
+#define NVIC_PR_OPTIONS  SCB_G_4_SUP_4
 

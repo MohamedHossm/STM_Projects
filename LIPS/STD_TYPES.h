@@ -40,4 +40,4 @@ typedef enum{
 
 }Error_t;
 
- #endif STDTYPES_H_
+ #endif  // STDTYPES_H_

@@ -82,13 +82,17 @@ typedef enum {
 #define NVIC_REG_SIZE 32
 //**********************************************************
 Error_t NVIC_u8Set_PR_options();
+
 Error_t NVIC_u8Set_EN_IRQ(NVIC_Prority_t Copy_IRQ_ID);
 Error_t NVIC_u8Clr_EN_IRQ(NVIC_Prority_t Copy_IRQ_ID);
+
 Error_t NVIC_u8Set_Pend_IRQ(NVIC_Prority_t Copy_IRQ_ID);
 Error_t NVIC_u8Clr_Pend_IRQ(NVIC_Prority_t Copy_IRQ_ID);
+
 Error_t NVIC_u8Get_Active_IRQ(NVIC_Prority_t Copy_IRQ_ID, u8* PtrActive_Value);
 
-
+Error_t NVIC_u8Set_PR_Value(NVIC_Prority_t Copy_IRQ_ID ,
+		                    u8 Copy_Periority_G_ID ,u8 Copy_Periority_SUB_ID );
 
 
 

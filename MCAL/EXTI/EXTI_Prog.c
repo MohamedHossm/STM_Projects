@@ -8,278 +8,255 @@
 #include "BIT_MATH.h"
 #include "STMF103C8_MMAP.h"
 
-#include"EXTI_Conf.h"
 #include"EXTI_Pivate.h"
+#include"EXTI_Conf.h"
 #include"EXTI_Interface.h"
 
+static void (*EXTI_PtrCallBack[EXTI_TOTAL])(void) = {NULL_PTR };
+
+Error_t EXTI_u8Setter_IRQ(EXTI_Line_t copy_u8Line, void (*CopyFun)(void)) {
+	Error_t local_u8Status = OK;
+	if (*CopyFun != NULL_PTR) {
+		if (copy_u8Line <= EXTI_Line15) {
+			EXTI_PtrCallBack[copy_u8Line] = CopyFun;
+		} else {
+			 local_u8Status = NOK;
+		}
+	} else {
+		Error_t local_u8Status = NOK;
+	}
+	return local_u8Status;
+}
 Error_t EXTI_u8Iint(void) {
-	#if LINE_0 
-	SET_BIT(EXTI->EXTI_IMR,LINE_0) ;
-	#if STATE == PRE_FAILING
-	SET_BIT(EXTI->EXTI_FTSR,LINE_0) ;
-	#elif STATE == PRE_RISING
-	SET_BIT(EXTI->EXTI_RTSR,LINE_0) ;
-	#elif STATE == PRE_FAILING_RISING
-	SET_BIT(EXTI->EXTI_FTSR,LINE_0) ;
-    SET_BIT(EXTI->EXTI_RTSR,LINE_0) ;
-	#endif // LINE_0
-#endif // if LINE_0
+	/*
+	 #if LINE_0EN
+	 SET_BIT(EXTI->EXTI_IMR,EXTI_Line0);
+	 #if LINE_0MODE == EXTI_PRE_FAILING
+	 SET_BIT(EXTI->EXTI_FTSR,EXTI_Line0);
+	 #elif LINE_0MODE == EXTI_PRE_RISING
+	 SET_BIT(EXTI->EXTI_RTSR,EXTI_Line0);
+	 #elif LINE_0MODE == EXTI_PRE_FAILING_RISING
+	 SET_BIT(EXTI->EXTI_FTSR,EXTI_Line0);
+	 SET_BIT(EXTI->EXTI_RTSR,EXTI_Line0);
+	 #endif // STATE
+	 #endif // if LINE_0EN
 
-#if LINE_1 
-	SET_BIT(EXTI->EXTI_IMR,LINE_1) ;
-	#if STATE == PRE_FAILING
-	SET_BIT(EXTI->EXTI_FTSR,LINE_1) ;
-	#elif STATE == PRE_RISING
-	SET_BIT(EXTI->EXTI_RTSR,LINE_1) ;
-	#elif STATE == PRE_FAILING_RISING
-	SET_BIT(EXTI->EXTI_FTSR,LINE_1) ;
-    SET_BIT(EXTI->EXTI_RTSR,LINE_1) ;
-	#endif // LINE_1
-#endif // if LINE_1
+	 #if LINE_1EN
+	 SET_BIT(EXTI->EXTI_IMR,EXTI_Line1);
+	 #if STATE == EXTI_PRE_FAILING
+	 SET_BIT(EXTI->EXTI_FTSR,EXTI_Line1);
+	 #elif STATE == EXTI_PRE_RISING
+	 SET_BIT(EXTI->EXTI_RTSR,EXTI_Line1);
+	 #elif STATE == EXTI_PRE_FAILING_RISING
+	 SET_BIT(EXTI->EXTI_FTSR,EXTI_Line1);
+	 SET_BIT(EXTI->EXTI_RTSR,EXTI_Line1);
+	 #endif // STATE
+	 #endif // if LINE_1EN
 
-#if LINE_2 
-	SET_BIT(EXTI->EXTI_IMR,LINE_2) ;
-	#if STATE == PRE_FAILING
-	SET_BIT(EXTI->EXTI_FTSR,LINE_2) ;
-	#elif STATE == PRE_RISING
-	SET_BIT(EXTI->EXTI_RTSR,LINE_2) ;
-	#elif STATE == PRE_FAILING_RISING
-	SET_BIT(EXTI->EXTI_FTSR,LINE_2) ;
-    SET_BIT(EXTI->EXTI_RTSR,LINE_2) ;
-	#endif // LINE_2
-#endif // if LINE_2
+	 #if LINE_2EN
+	 SET_BIT(EXTI->EXTI_IMR,EXTI_Line2);
+	 #if STATE == EXTI_PRE_FAILING
+	 SET_BIT(EXTI->EXTI_FTSR,EXTI_Line2);
+	 #elif STATE == EXTI_PRE_RISING
+	 SET_BIT(EXTI->EXTI_RTSR,EXTI_Line2);
+	 #elif STATE == EXTI_PRE_FAILING_RISING
+	 SET_BIT(EXTI->EXTI_FTSR,EXTI_Line2);
+	 SET_BIT(EXTI->EXTI_RTSR,EXTI_Line2);
+	 #endif // STATE
+	 #endif // if LINE_2EN
 
-#if LINE_3 
-	SET_BIT(EXTI->EXTI_IMR,LINE_3) ;
-	#if STATE == PRE_FAILING
-	SET_BIT(EXTI->EXTI_FTSR,LINE_3) ;
-	#elif STATE == PRE_RISING
-	SET_BIT(EXTI->EXTI_RTSR,LINE_3) ;
-	#elif STATE == PRE_FAILING_RISING
-	SET_BIT(EXTI->EXTI_FTSR,LINE_3) ;
-    SET_BIT(EXTI->EXTI_RTSR,LINE_3) ;
-	#endif // LINE_3
-#endif // if LINE_3
+	 #if LINE_3EN
+	 SET_BIT(EXTI->EXTI_IMR,EXTI_Line3);
+	 #if STATE == EXTI_PRE_FAILING
+	 SET_BIT(EXTI->EXTI_FTSR,EXTI_Line3);
+	 #elif STATE == EXTI_PRE_RISING
+	 SET_BIT(EXTI->EXTI_RTSR,EXTI_Line3);
+	 #elif STATE == EXTI_PRE_FAILING_RISING
+	 SET_BIT(EXTI->EXTI_FTSR,EXTI_Line3);
+	 SET_BIT(EXTI->EXTI_RTSR,EXTI_Line3);
+	 #endif // STATE
+	 #endif // if LINE_3EN
 
-#if LINE_4 
-	SET_BIT(EXTI->EXTI_IMR,LINE_4) ;
-	#if STATE == PRE_FAILING
-	SET_BIT(EXTI->EXTI_FTSR,LINE_4) ;
-	#elif STATE == PRE_RISING
-	SET_BIT(EXTI->EXTI_RTSR,LINE_4) ;
-	#elif STATE == PRE_FAILING_RISING
-	SET_BIT(EXTI->EXTI_FTSR,LINE_4) ;
-    SET_BIT(EXTI->EXTI_RTSR,LINE_4) ;
-	#endif // LINE_4
-#endif // if LINE_4
+	 #if LINE_4EN
+	 SET_BIT(EXTI->EXTI_IMR,EXTI_Line4);
+	 #if STATE == EXTI_PRE_FAILING
+	 SET_BIT(EXTI->EXTI_FTSR,EXTI_Line4);
+	 #elif STATE == EXTI_PRE_RISING
+	 SET_BIT(EXTI->EXTI_RTSR,EXTI_Line4);
+	 #elif STATE == EXTI_PRE_FAILING_RISING
+	 SET_BIT(EXTI->EXTI_FTSR,EXTI_Line4);
+	 SET_BIT(EXTI->EXTI_RTSR,EXTI_Line4);
+	 #endif // STATE
+	 #endif // if LINE_4EN
 
-#if LINE_5 
-	SET_BIT(EXTI->EXTI_IMR,LINE_5) ;
-	#if STATE == PRE_FAILING
-	SET_BIT(EXTI->EXTI_FTSR,LINE_5) ;
-	#elif STATE == PRE_RISING
-	SET_BIT(EXTI->EXTI_RTSR,LINE_5) ;
-	#elif STATE == PRE_FAILING_RISING
-	SET_BIT(EXTI->EXTI_FTSR,LINE_5) ;
-    SET_BIT(EXTI->EXTI_RTSR,LINE_5) ;
-	#endif // LINE_5
-#endif // if LINE_5
+	 #if LINE_5EN
+	 SET_BIT(EXTI->EXTI_IMR,EXTI_Line5);
+	 #if STATE == EXTI_PRE_FAILING
+	 SET_BIT(EXTI->EXTI_FTSR,EXTI_Line5);
+	 #elif STATE == EXTI_PRE_RISING
+	 SET_BIT(EXTI->EXTI_RTSR,EXTI_Line5);
+	 #elif STATE == EXTI_PRE_FAILING_RISING
+	 SET_BIT(EXTI->EXTI_FTSR,EXTI_Line5);
+	 SET_BIT(EXTI->EXTI_RTSR,EXTI_Line5);
+	 #endif // STATE
+	 #endif // if LINE_5EN
 
-#if LINE_6 
-	SET_BIT(EXTI->EXTI_IMR,LINE_6) ;
-	#if STATE == PRE_FAILING
-	SET_BIT(EXTI->EXTI_FTSR,LINE_6) ;
-	#elif STATE == PRE_RISING
-	SET_BIT(EXTI->EXTI_RTSR,LINE_6) ;
-	#elif STATE == PRE_FAILING_RISING
-	SET_BIT(EXTI->EXTI_FTSR,LINE_6) ;
-    SET_BIT(EXTI->EXTI_RTSR,LINE_6) ;
-	#endif // LINE_6
-#endif // if LINE_6
-
-#if LINE_7 
-	SET_BIT(EXTI->EXTI_IMR,LINE_7) ;
-	#if STATE == PRE_FAILING
-	SET_BIT(EXTI->EXTI_FTSR,LINE_7) ;
-	#elif STATE == PRE_RISING
-	SET_BIT(EXTI->EXTI_RTSR,LINE_7) ;
-	#elif STATE == PRE_FAILING_RISING
-	SET_BIT(EXTI->EXTI_FTSR,LINE_7) ;
-    SET_BIT(EXTI->EXTI_RTSR,LINE_7) ;
-	#endif // LINE_7
-#endif // if LINE_7
-
-#if LINE_8 
-	SET_BIT(EXTI->EXTI_IMR,LINE_8) ;
-	#if STATE == PRE_FAILING
-	SET_BIT(EXTI->EXTI_FTSR,LINE_8) ;
-	#elif STATE == PRE_RISING
-	SET_BIT(EXTI->EXTI_RTSR,LINE_8) ;
-	#elif STATE == PRE_FAILING_RISING
-	SET_BIT(EXTI->EXTI_FTSR,LINE_8) ;
-    SET_BIT(EXTI->EXTI_RTSR,LINE_8) ;
-	#endif // LINE_8
-#endif // if LINE_8
-
-#if LINE_9 
-	SET_BIT(EXTI->EXTI_IMR,LINE_9) ;
-	#if STATE == PRE_FAILING
-	SET_BIT(EXTI->EXTI_FTSR,LINE_9) ;
-	#elif STATE == PRE_RISING
-	SET_BIT(EXTI->EXTI_RTSR,LINE_9) ;
-	#elif STATE == PRE_FAILING_RISING
-	SET_BIT(EXTI->EXTI_FTSR,LINE_9) ;
-    SET_BIT(EXTI->EXTI_RTSR,LINE_9) ;
-	#endif // LINE_9
-#endif // if LINE_9
-
-#if LINE_10 
-	SET_BIT(EXTI->EXTI_IMR,LINE_10) ;
-	#if STATE == PRE_FAILING
-	SET_BIT(EXTI->EXTI_FTSR,LINE_10) ;
-	#elif STATE == PRE_RISING
-	SET_BIT(EXTI->EXTI_RTSR,LINE_10) ;
-	#elif STATE == PRE_FAILING_RISING
-	SET_BIT(EXTI->EXTI_FTSR,LINE_10) ;
-    SET_BIT(EXTI->EXTI_RTSR,LINE_10) ;
-	#endif // LINE_10
-#endif // if LINE_10
-
-#if LINE_11 
-	SET_BIT(EXTI->EXTI_IMR,LINE_11) ;
-	#if STATE == PRE_FAILING
-	SET_BIT(EXTI->EXTI_FTSR,LINE_11) ;
-	#elif STATE == PRE_RISING
-	SET_BIT(EXTI->EXTI_RTSR,LINE_11) ;
-	#elif STATE == PRE_FAILING_RISING
-	SET_BIT(EXTI->EXTI_FTSR,LINE_11) ;
-    SET_BIT(EXTI->EXTI_RTSR,LINE_11) ;
-	#endif // LINE_11
-#endif // if LINE_11
-
-#if LINE_12 
-	SET_BIT(EXTI->EXTI_IMR,LINE_12) ;
-	#if STATE == PRE_FAILING
-	SET_BIT(EXTI->EXTI_FTSR,LINE_12) ;
-	#elif STATE == PRE_RISING
-	SET_BIT(EXTI->EXTI_RTSR,LINE_12) ;
-	#elif STATE == PRE_FAILING_RISING
-	SET_BIT(EXTI->EXTI_FTSR,LINE_12) ;
-    SET_BIT(EXTI->EXTI_RTSR,LINE_12) ;
-	#endif // LINE_12
-#endif // if LINE_12
-
-#if LINE_13 
-	SET_BIT(EXTI->EXTI_IMR,LINE_13) ;
-	#if STATE == PRE_FAILING
-	SET_BIT(EXTI->EXTI_FTSR,LINE_13) ;
-	#elif STATE == PRE_RISING
-	SET_BIT(EXTI->EXTI_RTSR,LINE_13) ;
-	#elif STATE == PRE_FAILING_RISING
-	SET_BIT(EXTI->EXTI_FTSR,LINE_13) ;
-    SET_BIT(EXTI->EXTI_RTSR,LINE_13) ;
-	#endif // LINE_13
-#endif // if LINE_13
-
-#if LINE_14 
-	SET_BIT(EXTI->EXTI_IMR,LINE_14) ;
-	#if STATE == PRE_FAILING
-	SET_BIT(EXTI->EXTI_FTSR,LINE_14) ;
-	#elif STATE == PRE_RISING
-	SET_BIT(EXTI->EXTI_RTSR,LINE_14) ;
-	#elif STATE == PRE_FAILING_RISING
-	SET_BIT(EXTI->EXTI_FTSR,LINE_14) ;
-    SET_BIT(EXTI->EXTI_RTSR,LINE_14) ;
-	#endif // LINE_14
-#endif // if LINE_14
-
-#if LINE_15 
-	SET_BIT(EXTI->EXTI_IMR,LINE_15) ;
-	#if STATE == PRE_FAILING
-	SET_BIT(EXTI->EXTI_FTSR,LINE_15) ;
-	#elif STATE == PRE_RISING
-	SET_BIT(EXTI->EXTI_RTSR,LINE_15) ;
-	#elif STATE == PRE_FAILING_RISING
-	SET_BIT(EXTI->EXTI_FTSR,LINE_15) ;
-    SET_BIT(EXTI->EXTI_RTSR,LINE_15) ;
-	#endif // LINE_15
-#endif // if LINE_15
+	 #if LINE_6EN
+	 SET_BIT(EXTI->EXTI_IMR,EXTI_Line6);
+	 #if STATE == EXTI_PRE_FAILING
+	 SET_BIT(EXTI->EXTI_FTSR,EXTI_Line6);
+	 #elif STATE == EXTI_PRE_RISING
+	 SET_BIT(EXTI->EXTI_RTSR,EXTI_Line6);
+	 #elif STATE == EXTI_PRE_FAILING_RISING
+	 SET_BIT(EXTI->EXTI_FTSR,EXTI_Line6);
+	 SET_BIT(EXTI->EXTI_RTSR,EXTI_Line6);
+	 #endif // STATE
+	 #endif // if LINE_6EN
+	 */
+	// do nothing
+	return OK;
 }
 
 Error_t EXTI_u8En(EXTI_Line_t copy_u8Line) {
-	Error_t Copy_u8State = OK ; 
-	if (copy_u8Line < EXTI_TOTAL){
-		SET_BIT(EXTI->EXTI_IMR,copy_u8Line) ;
-	}else {
-		Copy_u8State = NOK ; 
+	Error_t Copy_u8State = OK;
+	if (copy_u8Line < EXTI_TOTAL) {
+		SET_BIT(EXTI->EXTI_IMR, copy_u8Line);
+	} else {
+		Copy_u8State = NOK;
 	}
-	return Copy_u8State ; 
+	return Copy_u8State;
 }
 
 Error_t EXTI_u8Ds(EXTI_Line_t copy_u8Line) {
-	
-	Error_t Copy_u8State = OK ; 
-	if (copy_u8Line < EXTI_TOTAL){
-		CLR_BIT(EXTI->EXTI_IMR,copy_u8Line) ;
-	}else {
-		Copy_u8State = NOK ; 
+
+	Error_t Copy_u8State = OK;
+	if (copy_u8Line < EXTI_TOTAL) {
+		CLR_BIT(EXTI->EXTI_IMR, copy_u8Line);
+	} else {
+		Copy_u8State = NOK;
 	}
-	return Copy_u8State ; 
+	return Copy_u8State;
 }
-Error_t EXTI_u8SW_interrupt(EXTI_Line_t copy_u8Line) 
-{
-Error_t Copy_u8State = OK ; 
-	if (copy_u8Line < EXTI_TOTAL){
-		SET_BIT(EXTI->EXTI_SWIER,copy_u8Line) ;
-		EXTI_u8CLR_pend(copy_u8Line);
-	}else {
-		Copy_u8State = NOK ; 
+Error_t EXTI_u8SW_interrupt(EXTI_Line_t copy_u8Line) {
+	Error_t Copy_u8State = OK;
+	if (copy_u8Line < EXTI_TOTAL) {
+		SET_BIT(EXTI->EXTI_SWIER, copy_u8Line);
+		EXTI_u8Set_pend(copy_u8Line);
+	} else {
+		Copy_u8State = NOK;
 	}
-	return Copy_u8State ; 
+	return Copy_u8State;
 }
 Error_t EXTI_u8Set_pend(EXTI_Line_t copy_u8Line) {
-	Error_t Copy_u8State = OK ; 
-	if (copy_u8Line < EXTI_TOTAL){
-		SET_BIT(EXTI->EXTI_PR,copy_u8Line) ;
-	}else {
-		Copy_u8State = NOK ; 
+	Error_t Copy_u8State = OK;
+	if (copy_u8Line < EXTI_TOTAL) {
+		CLR_BIT(EXTI->EXTI_PR, copy_u8Line);
+	} else {
+		Copy_u8State = NOK;
 	}
-	return Copy_u8State ; 
+	return Copy_u8State;
 }
 
 Error_t EXTI_u8CLR_pend(EXTI_Line_t copy_u8Line) {
-	Error_t Copy_u8State = OK ; 
-	if (copy_u8Line < EXTI_TOTAL){
-		CLR_BIT(EXTI->EXTI_PR,copy_u8Line) ;
-	}else {
-		Copy_u8State = NOK ; 
+	Error_t Copy_u8State = OK;
+	if (copy_u8Line < EXTI_TOTAL) {
+		SET_BIT(EXTI->EXTI_PR, copy_u8Line);
+	} else {
+		Copy_u8State = NOK;
 	}
-	return Copy_u8State ; 
+	return Copy_u8State;
 }
 
-
-Error_t EXTI_u8Set_Inturrupt_latch(EXTI_Line_t copy_u8Line ,
-	EXTI_MODE_t copy_u8Mode)
-{
-	Error_t Copy_u8State = OK ; 
-	if (copy_u8Line < EXTI_TOTAL){
-		switch(copy_u8Mode){
-		case : EXTI_FAILING
-			SET_BIT(EXTI->EXTI_FTSR,copy_u8Line) ;
-			break ; 
-		case : EXTI_RISING
-			SET_BIT(EXTI->EXTI_RTSR,copy_u8Line) ;
-			break ; 
-		case : EXTI_FAILING_RISING
-			SET_BIT(EXTI->EXTI_RTSR,copy_u8Line) ;
-			SET_BIT(EXTI->EXTI_FTSR,copy_u8Line) ;
-			break ; 
-		default : 
-			Copy_u8State = NOK ; 
-			break ; 
+Error_t EXTI_u8Set_Inturrupt_latch(EXTI_Line_t copy_u8Line,
+		EXTI_MODE_t copy_u8Mode) {
+	Error_t Copy_u8State = OK;
+	if (copy_u8Line < EXTI_TOTAL) {
+		switch (copy_u8Mode) {
+		case EXTI_FAILING:
+			SET_BIT(EXTI->EXTI_FTSR, copy_u8Line);
+			break;
+		case EXTI_RISING:
+			SET_BIT(EXTI->EXTI_RTSR, copy_u8Line);
+			break;
+		case EXTI_FAILING_RISING:
+			SET_BIT(EXTI->EXTI_RTSR, copy_u8Line);
+			SET_BIT(EXTI->EXTI_FTSR, copy_u8Line);
+			break;
+		default:
+			Copy_u8State = NOK;
+			break;
 		}
-	}else {
-		Copy_u8State = NOK ; 
+	} else {
+		Copy_u8State = NOK;
 	}
-	return Copy_u8State ; 								
+	return Copy_u8State;
 }
+
+/******************************************************************/
+/******************************************************************/
+/******************************************************************/
+/******************************************************************/
+// IRQS
+void EXTI0_IRQHandler(void) /* EXTI Line0 interrupt */
+{
+	EXTI_PtrCallBack[EXTI_Line0]();
+}
+/* EXTI Line1 interrupt                             */
+void EXTI1_IRQHandler(void) {
+	EXTI_PtrCallBack[EXTI_Line1]();
+}
+/* EXTI Line2 interrupt                             */
+void EXTI2_IRQHandler(void) {
+	EXTI_PtrCallBack[EXTI_Line2]();
+}
+/* EXTI Line3 interrupt                             */
+void EXTI3_IRQHandler(void) {
+	EXTI_PtrCallBack[EXTI_Line3]();
+}
+/* EXTI Line4 interrupt                             */
+void EXTI4_IRQHandler(void) {
+	EXTI_PtrCallBack[EXTI_Line4]();
+}
+/* EXTI Line9_5 interrupt */
+void EXTI9_5_IRQHandler(void) {
+
+	if (EXTI_PtrCallBack[EXTI_Line5] != NULLPTR) {
+		EXTI_PtrCallBack[EXTI_Line5]();
+	}
+	if (EXTI_PtrCallBack[EXTI_Line6] != NULLPTR) {
+		EXTI_PtrCallBack[EXTI_Line6]();
+	}
+	if (EXTI_PtrCallBack[EXTI_Line7] != NULLPTR) {
+		EXTI_PtrCallBack[EXTI_Line7]();
+	}
+	if (EXTI_PtrCallBack[EXTI_Line8] != NULLPTR) {
+		EXTI_PtrCallBack[EXTI_Line8]();
+	}
+	if (EXTI_PtrCallBack[EXTI_Line9] != NULLPTR) {
+		EXTI_PtrCallBack[EXTI_Line9]();
+	}
+}
+
+/* EXTI Line15_10 interrupt */
+void EXTI15_10_IRQHandler(void) {
+
+	if (EXTI_PtrCallBack[EXTI_Line10] != NULLPTR) {
+		EXTI_PtrCallBack[EXTI_Line10]();
+	}
+	if (EXTI_PtrCallBack[EXTI_Line11] != NULLPTR) {
+		EXTI_PtrCallBack[EXTI_Line11]();
+	}
+	if (EXTI_PtrCallBack[EXTI_Line12] != NULLPTR) {
+		EXTI_PtrCallBack[EXTI_Line12]();
+	}
+	if (EXTI_PtrCallBack[EXTI_Line13] != NULLPTR) {
+		EXTI_PtrCallBack[EXTI_Line13]();
+	}
+	if (EXTI_PtrCallBack[EXTI_Line14] != NULLPTR) {
+		EXTI_PtrCallBack[EXTI_Line14]();
+	}
+	if (EXTI_PtrCallBack[EXTI_Line15] != NULLPTR) {
+		EXTI_PtrCallBack[EXTI_Line15]();
+	}
+}
+/******************************************************************/
