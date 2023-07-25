@@ -1,4 +1,3 @@
-
 #ifndef _STMF103C8_MMAP_H_
 #define _STMF103C8_MMAP_H_
 /*********************************************************/
@@ -57,7 +56,7 @@ typedef struct {
 	u32 NVIC_ICER[NVIC_SIZE];
 	u32 NVIC_ICER_RES[NVIC_res];
 
-    u32 NVIC_ISPR[NVIC_SIZE];
+	u32 NVIC_ISPR[NVIC_SIZE];
 	u32 NVIC_ISPR_RES[NVIC_res];
 
 	u32 NVIC_ICPR[NVIC_SIZE];
@@ -65,7 +64,7 @@ typedef struct {
 
 	u32 NVIC_IABR[NVIC_SIZE];
 	u32 NVIC_IABR_RES[NVIC_RES2];
-    volatile u8  NVIC_IPR [NCIC_NVIC_IPR_SIZE]  ;
+	volatile u8 NVIC_IPR[NCIC_NVIC_IPR_SIZE];
 } NVIC_REG_DEF_t;
 
 #define NVIC ((NVIC_REG_DEF_t*)NVIC_u32BASE_ADDRESS)
@@ -92,21 +91,33 @@ typedef struct {
 
 #define EXTI ((EXTI_REG_DEF_t*)EXTI_u32BASE_ADDRESS)
 
-
 /*********************************************************/
 /*******************AFIO Registers************************/
 /*********************************************************/
 #define AFIO_u32BASE_ADDRESS  0x40010000
 #define AFIO_EXTICRSIZE 4
 typedef struct {
-u32 AFIO_EVCR ;
-u32 AFIO_MAPR ;
-u32 AFIO_EXTICR[AFIO_EXTICRSIZE];
-u32 AFIO_MAPR2;
+	u32 AFIO_EVCR;
+	u32 AFIO_MAPR;
+	u32 AFIO_EXTICR[AFIO_EXTICRSIZE];
+	u32 AFIO_MAPR2;
 } AFIO_REG_DEF_t;
-
 
 #define AFIO ((AFIO_REG_DEF_t*)AFIO_u32BASE_ADDRESS)
 
+/*************************************************************/
+/*******************SYSTICK Registers*************************/
+/*************************************************************/
+
+#define SYSTICK_u32BASE_ADDRESS  0xE000E010
+
+typedef struct {
+	volatile u32 STK_CTRL;
+	volatile u32 STK_LOAD;
+	volatile u32 STK_VAL;
+	volatile u32 STK_CALIB;
+} SYSTICK_REG_DEF_t;
+
+#define SYSTICK ((SYSTICK_REG_DEF_t*)SYSTICK_u32BASE_ADDRESS)
 
 #endif //_STMF103C8_MMAP_H_
