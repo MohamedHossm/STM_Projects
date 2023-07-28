@@ -26,7 +26,7 @@ typedef enum {
 	AFIO_Cont_ISQ_TOTAL
 } AFIO_Cont_ISQ_Line_t;
 typedef enum {
-	AFIO_SEL_PA,
+	AFIO_SEL_PA = 0,
 	AFIO_SEL_PB,
 	AFIO_SEL_PC
 } AFIO_Cont_ISQ_PORT_t;

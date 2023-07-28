@@ -47,6 +47,8 @@ Error_t EXTI_u8Set_Inturrupt_latch(EXTI_Line_t copy_u8Line ,
 Error_t EXTI_u8Set_pend(EXTI_Line_t copy_u8Line) ; 
 Error_t EXTI_u8CLR_pend(EXTI_Line_t copy_u8Line);
 
+Error_t EXTI_u8Read_pend(EXTI_Line_t copy_u8Line, u8* returnData) ;
+
 Error_t EXTI_u8Setter_IRQ(EXTI_Line_t copy_u8Line, void (*CopyFun)(void)) ;
 
 #endif //EXTI_INTERFACE_H_

@@ -12,18 +12,18 @@
 #include"EXTI_Conf.h"
 #include"EXTI_Interface.h"
 
-static void (*EXTI_PtrCallBack[EXTI_TOTAL])(void) = {NULL_PTR };
+static void (*EXTI_PtrCallBack[EXTI_TOTAL])(void) = {NULLPTR };
 
 Error_t EXTI_u8Setter_IRQ(EXTI_Line_t copy_u8Line, void (*CopyFun)(void)) {
 	Error_t local_u8Status = OK;
-	if (*CopyFun != NULL_PTR) {
+	if (*CopyFun != NULLPTR) {
 		if (copy_u8Line <= EXTI_Line15) {
 			EXTI_PtrCallBack[copy_u8Line] = CopyFun;
 		} else {
-			 local_u8Status = NOK;
+			local_u8Status = NOK;
 		}
 	} else {
-		Error_t local_u8Status = NOK;
+		local_u8Status = NOK;
 	}
 	return local_u8Status;
 }
@@ -157,6 +157,15 @@ Error_t EXTI_u8Set_pend(EXTI_Line_t copy_u8Line) {
 	return Copy_u8State;
 }
 
+Error_t EXTI_u8Read_pend(EXTI_Line_t copy_u8Line, u8 *returnData) {
+	Error_t Copy_u8State = OK;
+	if (copy_u8Line < EXTI_TOTAL) {
+		//returnData = READ_BIT(EXTI->EXTI_PR, copy_u8Line);
+	} else {
+		Copy_u8State = NOK;
+	}
+	return Copy_u8State;
+}
 Error_t EXTI_u8CLR_pend(EXTI_Line_t copy_u8Line) {
 	Error_t Copy_u8State = OK;
 	if (copy_u8Line < EXTI_TOTAL) {
@@ -200,63 +209,108 @@ Error_t EXTI_u8Set_Inturrupt_latch(EXTI_Line_t copy_u8Line,
 void EXTI0_IRQHandler(void) /* EXTI Line0 interrupt */
 {
 	EXTI_PtrCallBack[EXTI_Line0]();
+	EXTI_u8CLR_pend(EXTI_Line0);
 }
 /* EXTI Line1 interrupt                             */
 void EXTI1_IRQHandler(void) {
 	EXTI_PtrCallBack[EXTI_Line1]();
+	EXTI_u8CLR_pend(EXTI_Line1);
+
 }
 /* EXTI Line2 interrupt                             */
 void EXTI2_IRQHandler(void) {
 	EXTI_PtrCallBack[EXTI_Line2]();
+	EXTI_u8CLR_pend(EXTI_Line2);
+
 }
 /* EXTI Line3 interrupt                             */
 void EXTI3_IRQHandler(void) {
 	EXTI_PtrCallBack[EXTI_Line3]();
+	EXTI_u8CLR_pend(EXTI_Line3);
+
 }
 /* EXTI Line4 interrupt                             */
 void EXTI4_IRQHandler(void) {
 	EXTI_PtrCallBack[EXTI_Line4]();
+	EXTI_u8CLR_pend(EXTI_Line4);
+
 }
 /* EXTI Line9_5 interrupt */
 void EXTI9_5_IRQHandler(void) {
+	if (READ_BIT(EXTI->EXTI_PR, EXTI_Line5)) {
+		if (EXTI_PtrCallBack[EXTI_Line5] != NULLPTR) {
+			EXTI_PtrCallBack[EXTI_Line5]();
+			EXTI_u8CLR_pend(EXTI_Line5);
 
-	if (EXTI_PtrCallBack[EXTI_Line5] != NULLPTR) {
-		EXTI_PtrCallBack[EXTI_Line5]();
+		}
 	}
-	if (EXTI_PtrCallBack[EXTI_Line6] != NULLPTR) {
-		EXTI_PtrCallBack[EXTI_Line6]();
+	if (READ_BIT(EXTI->EXTI_PR, EXTI_Line6)) {
+		if (EXTI_PtrCallBack[EXTI_Line6] != NULLPTR) {
+			EXTI_PtrCallBack[EXTI_Line6]();
+			EXTI_u8CLR_pend(EXTI_Line6);
+
+		}
 	}
-	if (EXTI_PtrCallBack[EXTI_Line7] != NULLPTR) {
-		EXTI_PtrCallBack[EXTI_Line7]();
+	if (READ_BIT(EXTI->EXTI_PR, EXTI_Line7)) {
+		if (EXTI_PtrCallBack[EXTI_Line7] != NULLPTR) {
+			EXTI_PtrCallBack[EXTI_Line7]();
+			EXTI_u8CLR_pend(EXTI_Line7);
+
+		}
 	}
-	if (EXTI_PtrCallBack[EXTI_Line8] != NULLPTR) {
-		EXTI_PtrCallBack[EXTI_Line8]();
+	if (READ_BIT(EXTI->EXTI_PR, EXTI_Line8)) {
+		if (EXTI_PtrCallBack[EXTI_Line8] != NULLPTR) {
+			EXTI_PtrCallBack[EXTI_Line8]();
+			EXTI_u8CLR_pend(EXTI_Line8);
+
+		}
 	}
-	if (EXTI_PtrCallBack[EXTI_Line9] != NULLPTR) {
-		EXTI_PtrCallBack[EXTI_Line9]();
+	if (READ_BIT(EXTI->EXTI_PR, EXTI_Line9)) {
+		if (EXTI_PtrCallBack[EXTI_Line9] != NULLPTR) {
+			EXTI_PtrCallBack[EXTI_Line9]();
+			EXTI_u8CLR_pend(EXTI_Line9);
+
+		}
 	}
 }
 
 /* EXTI Line15_10 interrupt */
 void EXTI15_10_IRQHandler(void) {
-
-	if (EXTI_PtrCallBack[EXTI_Line10] != NULLPTR) {
-		EXTI_PtrCallBack[EXTI_Line10]();
+	if (READ_BIT(EXTI->EXTI_PR, EXTI_Line10)) {
+		if (EXTI_PtrCallBack[EXTI_Line10] != NULLPTR) {
+			EXTI_PtrCallBack[EXTI_Line10]();
+			EXTI_u8CLR_pend(EXTI_Line10);
+		}
 	}
-	if (EXTI_PtrCallBack[EXTI_Line11] != NULLPTR) {
-		EXTI_PtrCallBack[EXTI_Line11]();
+	if (READ_BIT(EXTI->EXTI_PR, EXTI_Line11)) {
+		if (EXTI_PtrCallBack[EXTI_Line11] != NULLPTR) {
+			EXTI_PtrCallBack[EXTI_Line11]();
+			EXTI_u8CLR_pend(EXTI_Line11);
+		}
 	}
-	if (EXTI_PtrCallBack[EXTI_Line12] != NULLPTR) {
-		EXTI_PtrCallBack[EXTI_Line12]();
+	if (READ_BIT(EXTI->EXTI_PR, EXTI_Line12)) {
+		if (EXTI_PtrCallBack[EXTI_Line12] != NULLPTR) {
+			EXTI_PtrCallBack[EXTI_Line12]();
+			EXTI_u8CLR_pend(EXTI_Line12);
+		}
 	}
-	if (EXTI_PtrCallBack[EXTI_Line13] != NULLPTR) {
-		EXTI_PtrCallBack[EXTI_Line13]();
+	if (READ_BIT(EXTI->EXTI_PR, EXTI_Line13)) {
+		if (EXTI_PtrCallBack[EXTI_Line13] != NULLPTR) {
+			EXTI_PtrCallBack[EXTI_Line13]();
+			EXTI_u8CLR_pend(EXTI_Line13);
+		}
 	}
-	if (EXTI_PtrCallBack[EXTI_Line14] != NULLPTR) {
-		EXTI_PtrCallBack[EXTI_Line14]();
+	if (READ_BIT(EXTI->EXTI_PR, EXTI_Line14)) {
+		if (EXTI_PtrCallBack[EXTI_Line14] != NULLPTR) {
+			EXTI_PtrCallBack[EXTI_Line14]();
+			EXTI_u8CLR_pend(EXTI_Line14);
+		}
 	}
-	if (EXTI_PtrCallBack[EXTI_Line15] != NULLPTR) {
-		EXTI_PtrCallBack[EXTI_Line15]();
+	if (READ_BIT(EXTI->EXTI_PR, EXTI_Line15)) {
+		if (EXTI_PtrCallBack[EXTI_Line15] != NULLPTR) {
+			EXTI_PtrCallBack[EXTI_Line15]();
+			EXTI_u8CLR_pend(EXTI_Line15);
+		}
 	}
 }
 /******************************************************************/
