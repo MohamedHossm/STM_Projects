@@ -11,6 +11,7 @@
 
 #define LEDMRXEROR 26
 #define LEDMRX_lettersSIZE 28
+#define LEDMRX_lettersSIZEARA 33
 
 #define RETING 200
 typedef struct {
@@ -21,8 +22,13 @@ typedef struct {
 Error_t LEDMRX_u8Display(u8 arr_MRXvalue[]);
 Error_t LEDMRX_u8WriteString(char *string, u16 rating ) ;
 Error_t LEDMRX_u8WriteStringMove(char *string , u16 Rating);
+Error_t LEDMRX_u8WriteStringMoveArabic(char *string , u16 Rating) ;
+Error_t LEDMRX_u8WriteStringMoveEnglish(char *string , u16 Rating) ;
 /******************case ****************/
+Error_t SearchArabic(char charcter, s16 *index);
 Error_t Search(char charcter, s16 *index);
+void LEDMRX_voidCopyvalueEnglish(const u8 Source[], u8 distination[], s8 index);
+void LEDMRX_voidCopyvalueArabic(const u8 Source[], u8 distination[], s8 index);
 void LEDMRX_voidCopyvalue(const u8 Source[], u8 distination[], s8 index);
 /************************************/
 

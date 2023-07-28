@@ -16,13 +16,40 @@
 #include "math.h"
 extern GPIO_u8PIN_t LEDMTRLedsColms[LEDS_COLNUM];
 extern GPIO_u8PIN_t LEDMTRLedsRows[LEDS_ROWNUM];
-const LED_MRX_CONTANER_t LEDMRX_letters[LEDMRX_lettersSIZE];
+extern const LED_MRX_CONTANER_t LEDMRX_letters[LEDMRX_lettersSIZE];
+extern const LED_MRX_CONTANER_t LEDMRX_lettersArabic[LEDMRX_lettersSIZEARA];
 
 void LEDMRX_Init() {
 	// do nothing 
 }
 
- Error_t Search(char charcter, s16 *index) {
+Error_t SearchArabic(char charcter, s16 *index) {
+	Error_t local_u8Status = OK;
+	if (charcter >= 'a' && charcter <= 'z') {
+		charcter = charcter - ('a' - 'A');
+	} else if (charcter >= 'A' && charcter <= 'Z') {
+		//do nothing
+	} else if (charcter >= '0' && charcter <= '9') {
+		//do nothing
+
+	} else {
+		local_u8Status = NOK;
+	}
+	if (local_u8Status == OK) {
+		for (u8 i = 0; i < LEDMRX_lettersSIZEARA; i++) {
+			if (LEDMRX_lettersArabic[i].search == charcter) {
+				*index = i;
+				local_u8Status = OK;
+				break;
+			} else {
+				local_u8Status = NOK;
+			}
+		}
+	}
+	return local_u8Status;
+
+}
+Error_t Search(char charcter, s16 *index) {
 	Error_t local_u8Status = OK;
 	if (charcter >= 'a' && charcter <= 'z') {
 		charcter = charcter - ('a' - 'A');
@@ -52,26 +79,24 @@ u8 pow2(u8 index) {
 	}
 	return returnval;
 }
- void LEDMRX_voidCopyvalue(const u8 Source[], u8 distination[], s8 index) {
-	u8 Signflage = 0;
-	if (index < 0) {
-		index = index * (-1);
-		Signflage = 1;
-	}
+void LEDMRX_voidCopyvalueArabic(const u8 Source[], u8 distination[], s8 index) {
 	for (u8 i = 0; i < LEDMRXCOLSIZE; i++) {
+		distination[i] <<= 1;
+		WRITE_BIT(distination[i], 0, READ_BIT(Source[i],(LEDMRXCOLSIZE-index)));
 
-		distination[i] = Source[i];
-		//distination[i] = (distination[i] << 1);
-		if (Signflage) {
-			distination[i] = (distination[i] >> (index));
-		} else {
-			distination[i] = (distination[i] << index);
-		}
 	}
 
 }
+void LEDMRX_voidCopyvalueEnglish(const u8 Source[], u8 distination[], s8 index) {
 
-Error_t LEDMRX_u8WriteStringMove(char *string , u16 Rating) {
+	for (u8 i = 0; i < LEDMRXCOLSIZE; i++) {
+		distination[i] >>= 1;
+		WRITE_BIT(distination[i], 7, READ_BIT(Source[i],index));
+
+	}
+}
+
+Error_t LEDMRX_u8WriteStringMoveEnglish(char *string, u16 Rating) {
 	Error_t local_u8Status = OK;
 	//u8 rebeat = 0;
 	s16 returnindex = 0;
@@ -80,18 +105,52 @@ Error_t LEDMRX_u8WriteStringMove(char *string , u16 Rating) {
 		//rebeat = RETING;
 		if (Search(string[index], &returnindex) == OK) {
 
-			for (s8 i = -5; i < LEDMRXCOLSIZE; i++) {
+			for (s8 i = 0; i < LEDMRXCOLSIZE-1; i++) {
+				LEDMRX_voidCopyvalueEnglish(LEDMRX_letters[returnindex].arr,
+						DisValue, i);
 				for (u8 j = 0; j < Rating; j++) {
-					LEDMRX_voidCopyvalue(LEDMRX_letters[returnindex].arr,
-							DisValue, i);
+
 					LEDMRX_u8Display(DisValue);
 				}
 			}
 		} else {
-			for (s8 i = -5; i < LEDMRXCOLSIZE; i++) {
+			for (s8 i = 0; i < LEDMRXCOLSIZE; i++) {
+				LEDMRX_voidCopyvalueEnglish(LEDMRX_letters[LEDMRXEROR].arr,
+						DisValue, i);
 				for (u8 j = 0; j < Rating; j++) {
-					LEDMRX_voidCopyvalue(LEDMRX_letters[LEDMRXEROR].arr,
-							DisValue, i);
+
+					LEDMRX_u8Display(DisValue);
+				}
+			}
+		}
+	}
+	//Delay(500);
+
+	return local_u8Status;
+}
+Error_t LEDMRX_u8WriteStringMoveArabic(char *string, u16 Rating) {
+	Error_t local_u8Status = OK;
+	//u8 rebeat = 0;
+	s16 returnindex = 0;
+	u8 DisValue[8] = { 0 };
+	for (u16 index = 0; string[index]; index++) {
+		//rebeat = RETING;
+		if (SearchArabic(string[index], &returnindex) == OK) {
+
+			for (s8 i = 0; i < LEDMRXCOLSIZE; i++) {
+				LEDMRX_voidCopyvalueArabic(
+						LEDMRX_lettersArabic[returnindex].arr, DisValue, i);
+				for (u8 j = 0; j < Rating; j++) {
+
+					LEDMRX_u8Display(DisValue);
+				}
+			}
+		} else {
+			for (s8 i = 0; i < LEDMRXCOLSIZE; i++) {
+				LEDMRX_voidCopyvalueArabic(LEDMRX_letters[LEDMRXEROR].arr,
+						DisValue, i);
+				for (u8 j = 0; j < Rating; j++) {
+
 					LEDMRX_u8Display(DisValue);
 				}
 			}
