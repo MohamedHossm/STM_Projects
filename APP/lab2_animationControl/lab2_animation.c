@@ -8,7 +8,7 @@
 volatile u8 status = 0;
 u8 laststate = 0;
 extern GPIO_u8PIN_t LedsArray[LEDNUM];
-void (*funcs[3])(u8) = {&Flash, & Fta7y_Ya_wrda,&Ping_Pong };
+void (*funcs[FUNSNUM])(u8) = {&Flash, & Fta7y_Ya_wrda,&Ping_Pong };
 
 void lab2_animationControl_Runnable() {
 	laststate = status;
@@ -97,6 +97,6 @@ void Ping_Pong(u8 num) {
 }
 void BCONFun() {
 	status++;
-	status = status % 3;
+	status = status % FUNSNUM;
 }
 

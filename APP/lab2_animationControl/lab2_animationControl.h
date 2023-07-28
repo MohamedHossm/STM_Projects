@@ -10,7 +10,7 @@
 
 #define BCON Pin_B7
 #define LEDNUM 8
-
+#define FUNSNUM 3
 void Flash(u8 num);
 void Fta7y_Ya_wrda(u8 num);
 void Ping_Pong(u8 num);
