@@ -2,7 +2,7 @@
 /* Author         : Mohamed Hoasm                                             */
 /* Date           : 16/7/2023                                                 */
 /* Version        : 1.0                                                       */
-/*SW              : Blink led                                                        */
+/*SW              : mian                                                         */
 /*****************************************************************************/
 
 #include "STD_TYPES.h"
@@ -16,17 +16,11 @@
 #include "AFIO_Interface.h"
 #include "SYSTICK_Interface.h"
 #include "LEDMRX_Interface.h"
-#include "lab2_animationControl.h"
+#include "Lap1_LedMatixControl.h"
 
 
 
-
-
-
-
-
-
-
+u16 i =0;
 int main(void) {
 
 	RCC_voidInitSystemClock();
@@ -62,9 +56,15 @@ int main(void) {
 
 	//set callback
 
-lab2_animationControl_Init();
+//lab2_animationControl_Init();
+
 	while (1) {
-lab2_animationControl_Runnable() ;
+
+
+		 LEDMRX_u8WriteStringMoveEnglishControlled("mohamed", 80, i);
+		 i ++ ;
+		//LEDMRX_u8WriteStringMoveArabic("m7md ",100);
+	//	LEDMRX_u8WriteStringMoveEnglish("mohamed ",100);
 	}
 
 	return 0;

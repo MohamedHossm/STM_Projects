@@ -95,7 +95,31 @@ void LEDMRX_voidCopyvalueEnglish(const u8 Source[], u8 distination[], s8 index) 
 
 	}
 }
+Error_t LEDMRX_u8WriteStringMoveEnglishControlled(char *string, u16 Rating, u16 pos) {
+	Error_t local_u8Status = OK;
+	//u8 rebeat = 0;
+	s16 returnindex = 0;
+	static u8 DisValue[8] = { 0 };
+	u8 index = pos/8;
+	if (string[index]) {
 
+		if (Search(string[index], &returnindex) == OK) {
+
+			LEDMRX_voidCopyvalueEnglish(LEDMRX_letters[returnindex].arr,
+					DisValue, pos%8);
+			for (u8 j = 0; j < Rating;j++) {
+				LEDMRX_u8Display(DisValue);
+			}
+		} else {
+			LEDMRX_voidCopyvalueEnglish(LEDMRX_letters[LEDMRXEROR].arr,
+					DisValue, pos%8);
+			for (u8 j = 0; j < Rating;j++) {
+				LEDMRX_u8Display(DisValue);
+			}
+		}
+	}
+	return local_u8Status;
+}
 Error_t LEDMRX_u8WriteStringMoveEnglish(char *string, u16 Rating) {
 	Error_t local_u8Status = OK;
 	//u8 rebeat = 0;

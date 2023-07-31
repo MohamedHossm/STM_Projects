@@ -25,4 +25,5 @@ void B4Fun();
 void ledmatrex(char name[]);
 Error_t APPLEDMRX_u8WriteStringMove(char *string, u16 Rating);
 
+Error_t APPLEDMRX_u8WriteStringMoveControlled(char *string, u16 Rating, u16 pos);
 #endif /* LAP1_LEDMATIXCONTROL_H_ */

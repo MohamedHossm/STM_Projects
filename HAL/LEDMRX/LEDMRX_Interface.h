@@ -27,6 +27,7 @@ Error_t LEDMRX_u8WriteStringMoveEnglish(char *string , u16 Rating) ;
 /******************case ****************/
 Error_t SearchArabic(char charcter, s16 *index);
 Error_t Search(char charcter, s16 *index);
+Error_t LEDMRX_u8WriteStringMoveEnglishControlled(char *string, u16 Rating, u16 pos);
 void LEDMRX_voidCopyvalueEnglish(const u8 Source[], u8 distination[], s8 index);
 void LEDMRX_voidCopyvalueArabic(const u8 Source[], u8 distination[], s8 index);
 void LEDMRX_voidCopyvalue(const u8 Source[], u8 distination[], s8 index);

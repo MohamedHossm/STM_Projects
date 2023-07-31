@@ -13,8 +13,6 @@ volatile u8 LedMRX_stateV = 1;
 volatile u8 LedMRX_Speed = LIMITSPEAD_LOW;
 const LED_MRX_CONTANER_t LEDMRX_letters[LEDMRX_lettersSIZE];
 
-
-
 void ledmatrex(char name[]) {
 	char chardata[2];
 
@@ -48,20 +46,46 @@ void B4Fun() {
 	}
 
 }
-Error_t APPLEDMRX_u8WriteStringMove(char *string, u16 Rating) {
+/*
+Error_t APPLEDMRX_u8WriteStringMoveControlled(char *string, u16 Rating, u16 pos) {
 	Error_t local_u8Status = OK;
 	//u8 rebeat = 0;
+	s16 returnindex = 0;
+	static u8 DisValue[8] = { 0 };
+	u8 index = pos/8;
+	if (string[index]) {
+
+		if (Search(string[index], &returnindex) == OK) {
+
+			LEDMRX_voidCopyvalueEnglish(LEDMRX_letters[returnindex].arr,
+					DisValue, pos%8);
+			for (u8 j = 0; j < Rating;j++) {
+				LEDMRX_u8Display(DisValue);
+			}
+		} else {
+			LEDMRX_voidCopyvalueEnglish(LEDMRX_letters[LEDMRXEROR].arr,
+					DisValue, pos%8);
+			for (u8 j = 0; j < Rating;j++) {
+				LEDMRX_u8Display(DisValue);
+			}
+		}
+	}
+	return local_u8Status;
+}
+*/
+Error_t APPLEDMRX_u8WriteStringMove(char *string, u16 Rating) {
+	Error_t local_u8Status = OK;
+//u8 rebeat = 0;
 	s16 returnindex = 0;
 	u8 DisValue[8] = { 0 };
 	for (u16 index = 0; string[index]; index++) {
 		//rebeat = RETING;
 		if (Search(string[index], &returnindex) == OK) {
 
-			for (s8 i = -5; i < LEDMRXCOLSIZE; i++) {
+			for (s8 i = 0; i < LEDMRXCOLSIZE; i++) {
+				LEDMRX_voidCopyvalueEnglish(LEDMRX_letters[returnindex].arr,
+						DisValue, i);
 				for (u8 j = 0; j < Rating;) {
-
-					LEDMRX_voidCopyvalue(LEDMRX_letters[returnindex].arr,
-							DisValue, i);
 					LEDMRX_u8Display(DisValue);
 					if (LedMRX_stateV == 1) {
 						j++;
@@ -71,10 +95,10 @@ Error_t APPLEDMRX_u8WriteStringMove(char *string, u16 Rating) {
 				}
 			}
 		} else {
-			for (s8 i = -5; i < LEDMRXCOLSIZE; i++) {
+			for (s8 i = 0; i < LEDMRXCOLSIZE; i++) {
+				LEDMRX_voidCopyvalueEnglish(LEDMRX_letters[LEDMRXEROR].arr,
+						DisValue, i);
 				for (u8 j = 0; j < Rating;) {
-					LEDMRX_voidCopyvalue(LEDMRX_letters[LEDMRXEROR].arr,
-							DisValue, i);
 					LEDMRX_u8Display(DisValue);
 					if (LedMRX_stateV == 1) {
 						j++;
@@ -85,7 +109,7 @@ Error_t APPLEDMRX_u8WriteStringMove(char *string, u16 Rating) {
 			}
 		}
 	}
-	//Delay(500);
+//Delay(500);
 
 	return local_u8Status;
 }
