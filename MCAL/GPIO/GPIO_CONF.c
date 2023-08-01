@@ -10,7 +10,7 @@
 
 const   GPIO_Conf_t  GPIO_Conf_ARR [PINTOTAL] ={
 
-		{Pin_A0      ,GPIO_u8OUT_PUSH_PULL_2MHZ },
+		{Pin_A0      ,GPIO_u8INPUT_FLOATING },
 		{Pin_A1      ,GPIO_u8OUT_PUSH_PULL_2MHZ },
 		{Pin_A2      ,GPIO_u8OUT_PUSH_PULL_2MHZ },
 		{Pin_A3      ,GPIO_u8OUT_PUSH_PULL_2MHZ },

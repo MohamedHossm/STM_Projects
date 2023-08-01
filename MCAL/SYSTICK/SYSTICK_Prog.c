@@ -37,7 +37,7 @@ Error_t STK_u8SetBusyWait(u32 Copy_time_MS) {
 	STK_u8DSInterrupt();
 	// set loud
 	//STK_u8StopTimer();
-	Copy_time_MS =Copy_time_MS*1000 ;
+	Copy_time_MS = Copy_time_MS * 1000;
 	if (Copy_time_MS < STK_MAXVALUE) {
 		SYSTICK->STK_LOAD = Copy_time_MS;
 		SET_BIT(SYSTICK->STK_CTRL, 0);
@@ -53,6 +53,31 @@ Error_t STK_u8SetBusyWait(u32 Copy_time_MS) {
 	// return
 	return local_u8status;
 
+}
+Error_t STK_u8SetIntervalSingleOV(u32 Copy_time_MS, void (*STK_FunISR)(void)) {
+	Error_t local_u8status = NOK;
+	local_u8status = OK;
+	STK_ProtectionFlage = 1;
+	STK_u8StopTimer();
+	// enable inturrupt
+
+	// forward function to isr -- clear load and
+	STK_CHAECK_PERODIC = 1;
+	if (STK_FunISR != NULLPTR) {
+		STK_u8SetCallBack(STK_FunISR);
+	} else {
+		local_u8status = NOK;
+	}
+	// set loud
+	if (Copy_time_MS < STK_MAXVALUE) {
+		SYSTICK->STK_LOAD = Copy_time_MS;
+		STK_u8StartTimer();
+	} else {
+		local_u8status = NOK;
+
+	}
+	// return
+	return local_u8status;
 }
 Error_t STK_u8SetIntervalSingle(u32 Copy_time_MS, void (*STK_FunISR)(void)) {
 	Error_t local_u8status = NOK;
@@ -104,10 +129,11 @@ Error_t STK_u8SetIntervalPeriodic(u32 Copy_time_MS, void (*STK_FunISR)(void)) {
 Error_t STK_u8StopTimer() {
 	// set loud and value with zeroxs
 	Error_t local_u8status = OK;
+	CLR_BIT(SYSTICK->STK_CTRL, 0);
 	SYSTICK->STK_LOAD = 0;
 	SYSTICK->STK_VAL = 0;
 	STK_u8DSInterrupt();
-	CLR_BIT(SYSTICK->STK_CTRL, 0);
+
 	return local_u8status;
 }
 Error_t STK_u8StartTimer() {
@@ -120,7 +146,7 @@ Error_t STK_u8StartTimer() {
 Error_t STK_u8SpentTimer(u32 *Ptr_SpentTime) {
 	// diffrence between load and value
 	Error_t local_u8status = OK;
-	*Ptr_SpentTime = (SYSTICK->STK_LOAD - SYSTICK->STK_VAL);
+	*Ptr_SpentTime = ((SYSTICK->STK_LOAD) - (SYSTICK->STK_VAL));
 	return local_u8status;
 }
 

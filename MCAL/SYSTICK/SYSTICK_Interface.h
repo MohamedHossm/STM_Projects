@@ -14,6 +14,7 @@ Error_t STK_u8Init();
 Error_t STK_u8SetBusyWait (u32 Copy_time_MS) ;
 Error_t STK_u8SetIntervalSingle (u32 Copy_time_MS , void(*STK_FunISR)(void));
 Error_t STK_u8SetIntervalPeriodic (u32 Copy_time_MS , void(*STK_FunISR)(void));
+Error_t STK_u8SetIntervalSingleOV(u32 Copy_time_MS, void (*STK_FunISR)(void)) ;
 
 Error_t STK_u8StopTimer ();
 Error_t STK_u8StartTimer();
