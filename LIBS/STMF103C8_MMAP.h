@@ -119,5 +119,97 @@ typedef struct {
 } SYSTICK_REG_DEF_t;
 
 #define SYSTICK ((SYSTICK_REG_DEF_t*)SYSTICK_u32BASE_ADDRESS)
+/*************************************************************/
+/*******************DMA Registers*************************/
+/*************************************************************/
+
+#define DMA_u32BASE_ADDRESS  0x40020000
+#define DMA_CONF_SIZE 7
+/*
+typedef struct {
+
+	volatile u32 DMA_ISR ;
+	volatile u32 DMA_IFCR ;
+	//--------------------1------------------------
+	volatile u32 DMA_CCR1;
+	volatile u32 DMA_CNDTR1;
+	volatile u32 DMA_CPAR1;
+	volatile u32 DMA_CMAR1 ;
+	volatile u32 RESEVED1 ;
+	//---------------------2-----------------------
+	volatile u32 DMA_CCR2 ;
+	volatile u32 DMA_CNDTR2 ;
+	volatile u32 DMA_CPAR2 ;
+	volatile u32 DMA_CMAR2 ;
+	volatile u32 RESEVED2 ;
+	//----------------------3-----------------------
+	volatile u32 DMA_CCR3 ;
+	volatile u32 DMA_CNDTR3 ;
+	volatile u32 DMA_CPAR3 ;
+	volatile u32 DMA_CMAR3 ;
+	volatile u32 RESEVED3 ;
+	//-----------------------4----------------------
+	volatile u32 DMA_CCR4 ;
+	volatile u32 DMA_CNDTR4 ;
+	volatile u32 DMA_CPAR4 ;
+	volatile u32 DMA_CMAR4 ;
+	volatile u32 RESEVED4 ;
+	//-----------------------5----------------------
+	volatile u32 DMA_CCR5 ;
+	volatile u32 DMA_CNDTR5 ;
+	volatile u32 DMA_CPAR5 ;
+	volatile u32 DMA_CMAR5 ;
+	volatile u32 RESEVED5 ;
+	//------------------------6---------------------
+	volatile u32 DMA_CCR6 ;
+	volatile u32 DMA_CNDTR6 ;
+	volatile u32 DMA_CPAR6 ;
+	volatile u32 DMA_CMAR6 ;
+	volatile u32 RESEVED6 ;
+	//-------------------------7--------------------
+	volatile u32 DMA_CCR7 ;
+	volatile u32 DMA_CNDTR7 ;
+	volatile u32 DMA_CPAR7 ;
+	volatile u32 DMA_CMAR7 ;
+	volatile u32 RESEVED7 ;
+	//---------------------------------------------
+
+}DMA_REG_DEF_t;
+*/
+
+
+typedef struct {
+	u16 DMA_EN :1;
+	u16 DMA_TCIE :1;
+	u16 DMA_HTIE :1;
+	u16 DMA_TEIE :1;
+	u16 DMA_DIR :1;
+	u16 DMA_CIRC :1;
+	u16 DMA_PINC :1;
+	u16 DMA_MINC :1;
+	u16 DMA_PSIZE :2;
+	u16 DMA_MSIZE :2;
+	u16 DMA_PL :2;
+	u16 DMA_MEM2MEM :1;
+	u16 DMA_RESERV :1;
+	u16 DMA_RESERVval ;
+} DMAConf_t;
+typedef struct {
+	volatile DMAConf_t DMA_CCR;
+	volatile u32 DMA_CNDTR;
+	volatile u32 DMA_CPAR;
+	volatile u32 DMA_CMAR ;
+	volatile u32 RESEVED ;
+}
+DMA_CH_REG_t ;
+typedef struct {
+
+	volatile u32 DMA_ISR ;
+	volatile u32 DMA_IFCR ;
+
+	DMA_CH_REG_t DMA_CH[DMA_CONF_SIZE];
+}DMA_REG_DEF_t;
+
+#define DMA ((DMA_REG_DEF_t*)DMA_u32BASE_ADDRESS)
 
 #endif //_STMF103C8_MMAP_H_
