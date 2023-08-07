@@ -20,6 +20,7 @@ typedef struct {
 }LED_MRX_CONTANER_t ;
 
 Error_t LEDMRX_u8Display(u8 arr_MRXvalue[]);
+Error_t LEDMRX_u8DisplayArray(u8 arr_MRXvalue[][8],u16 rating, u8 size);
 Error_t LEDMRX_u8WriteString(char *string, u16 rating ) ;
 Error_t LEDMRX_u8WriteStringMove(char *string , u16 Rating);
 Error_t LEDMRX_u8WriteStringMoveArabic(char *string , u16 Rating) ;

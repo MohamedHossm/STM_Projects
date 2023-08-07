@@ -95,25 +95,26 @@ void LEDMRX_voidCopyvalueEnglish(const u8 Source[], u8 distination[], s8 index) 
 
 	}
 }
-Error_t LEDMRX_u8WriteStringMoveEnglishControlled(char *string, u16 Rating, u16 pos) {
+Error_t LEDMRX_u8WriteStringMoveEnglishControlled(char *string, u16 Rating,
+		u16 pos) {
 	Error_t local_u8Status = OK;
 	//u8 rebeat = 0;
 	s16 returnindex = 0;
 	static u8 DisValue[8] = { 0 };
-	u8 index = pos/8;
+	u8 index = pos / 8;
 	if (string[index]) {
 
 		if (Search(string[index], &returnindex) == OK) {
 
 			LEDMRX_voidCopyvalueEnglish(LEDMRX_letters[returnindex].arr,
-					DisValue, pos%8);
-			for (u8 j = 0; j < Rating;j++) {
+					DisValue, pos % 8);
+			for (u8 j = 0; j < Rating; j++) {
 				LEDMRX_u8Display(DisValue);
 			}
 		} else {
 			LEDMRX_voidCopyvalueEnglish(LEDMRX_letters[LEDMRXEROR].arr,
-					DisValue, pos%8);
-			for (u8 j = 0; j < Rating;j++) {
+					DisValue, pos % 8);
+			for (u8 j = 0; j < Rating; j++) {
 				LEDMRX_u8Display(DisValue);
 			}
 		}
@@ -129,7 +130,7 @@ Error_t LEDMRX_u8WriteStringMoveEnglish(char *string, u16 Rating) {
 		//rebeat = RETING;
 		if (Search(string[index], &returnindex) == OK) {
 
-			for (s8 i = 0; i < LEDMRXCOLSIZE-1; i++) {
+			for (s8 i = 0; i < LEDMRXCOLSIZE - 1; i++) {
 				LEDMRX_voidCopyvalueEnglish(LEDMRX_letters[returnindex].arr,
 						DisValue, i);
 				for (u8 j = 0; j < Rating; j++) {
@@ -206,6 +207,24 @@ Error_t LEDMRX_u8WriteString(char *string, u16 rating) {
 	return local_u8Status;
 }
 
+Error_t LEDMRX_u8DisplayArray(u8 arr_MRXvalue[][8],u16 rating, u8 size) {
+	Error_t local_u8Status = OK;
+	u8 rebeat = 0;
+
+	for (u16 index = 0; index < size; index++) {
+		rebeat = rating;
+
+		for (; rebeat > 0; rebeat--) {
+			LEDMRX_u8Display(arr_MRXvalue[index]);
+
+		}
+
+		//STK_u8SetBusyWait(250000);
+	}
+	//Delay(500);
+
+	return local_u8Status;
+}
 Error_t LEDMRX_u8Display(u8 arr_MRXvalue[]) {
 	/* write low on all led matrix COLS */
 	for (u8 i = 0; i < LEDMRXCOLSIZE; i++) {
@@ -234,6 +253,7 @@ Error_t LEDMRX_u8Display(u8 arr_MRXvalue[]) {
 		}
 		if (i == 0) {
 			GPIO_u8SetPinV_ID(LEDMTRLedsColms[i], LOW);
+
 		} else {
 			// set prev high and clr curr
 			GPIO_u8SetPinV_ID(LEDMTRLedsColms[i - 1], HIGH);
@@ -241,6 +261,7 @@ Error_t LEDMRX_u8Display(u8 arr_MRXvalue[]) {
 			//STK_u8SetBusyWait(3);
 			Delay(3);
 		}
+		if (i != 0)
 		GPIO_u8SetPinV_ID(LEDMTRLedsColms[i], HIGH);
 	}
 	return OK;

@@ -126,57 +126,56 @@ typedef struct {
 #define DMA_u32BASE_ADDRESS  0x40020000
 #define DMA_CONF_SIZE 7
 /*
-typedef struct {
+ typedef struct {
 
-	volatile u32 DMA_ISR ;
-	volatile u32 DMA_IFCR ;
-	//--------------------1------------------------
-	volatile u32 DMA_CCR1;
-	volatile u32 DMA_CNDTR1;
-	volatile u32 DMA_CPAR1;
-	volatile u32 DMA_CMAR1 ;
-	volatile u32 RESEVED1 ;
-	//---------------------2-----------------------
-	volatile u32 DMA_CCR2 ;
-	volatile u32 DMA_CNDTR2 ;
-	volatile u32 DMA_CPAR2 ;
-	volatile u32 DMA_CMAR2 ;
-	volatile u32 RESEVED2 ;
-	//----------------------3-----------------------
-	volatile u32 DMA_CCR3 ;
-	volatile u32 DMA_CNDTR3 ;
-	volatile u32 DMA_CPAR3 ;
-	volatile u32 DMA_CMAR3 ;
-	volatile u32 RESEVED3 ;
-	//-----------------------4----------------------
-	volatile u32 DMA_CCR4 ;
-	volatile u32 DMA_CNDTR4 ;
-	volatile u32 DMA_CPAR4 ;
-	volatile u32 DMA_CMAR4 ;
-	volatile u32 RESEVED4 ;
-	//-----------------------5----------------------
-	volatile u32 DMA_CCR5 ;
-	volatile u32 DMA_CNDTR5 ;
-	volatile u32 DMA_CPAR5 ;
-	volatile u32 DMA_CMAR5 ;
-	volatile u32 RESEVED5 ;
-	//------------------------6---------------------
-	volatile u32 DMA_CCR6 ;
-	volatile u32 DMA_CNDTR6 ;
-	volatile u32 DMA_CPAR6 ;
-	volatile u32 DMA_CMAR6 ;
-	volatile u32 RESEVED6 ;
-	//-------------------------7--------------------
-	volatile u32 DMA_CCR7 ;
-	volatile u32 DMA_CNDTR7 ;
-	volatile u32 DMA_CPAR7 ;
-	volatile u32 DMA_CMAR7 ;
-	volatile u32 RESEVED7 ;
-	//---------------------------------------------
+ volatile u32 DMA_ISR ;
+ volatile u32 DMA_IFCR ;
+ //--------------------1------------------------
+ volatile u32 DMA_CCR1;
+ volatile u32 DMA_CNDTR1;
+ volatile u32 DMA_CPAR1;
+ volatile u32 DMA_CMAR1 ;
+ volatile u32 RESEVED1 ;
+ //---------------------2-----------------------
+ volatile u32 DMA_CCR2 ;
+ volatile u32 DMA_CNDTR2 ;
+ volatile u32 DMA_CPAR2 ;
+ volatile u32 DMA_CMAR2 ;
+ volatile u32 RESEVED2 ;
+ //----------------------3-----------------------
+ volatile u32 DMA_CCR3 ;
+ volatile u32 DMA_CNDTR3 ;
+ volatile u32 DMA_CPAR3 ;
+ volatile u32 DMA_CMAR3 ;
+ volatile u32 RESEVED3 ;
+ //-----------------------4----------------------
+ volatile u32 DMA_CCR4 ;
+ volatile u32 DMA_CNDTR4 ;
+ volatile u32 DMA_CPAR4 ;
+ volatile u32 DMA_CMAR4 ;
+ volatile u32 RESEVED4 ;
+ //-----------------------5----------------------
+ volatile u32 DMA_CCR5 ;
+ volatile u32 DMA_CNDTR5 ;
+ volatile u32 DMA_CPAR5 ;
+ volatile u32 DMA_CMAR5 ;
+ volatile u32 RESEVED5 ;
+ //------------------------6---------------------
+ volatile u32 DMA_CCR6 ;
+ volatile u32 DMA_CNDTR6 ;
+ volatile u32 DMA_CPAR6 ;
+ volatile u32 DMA_CMAR6 ;
+ volatile u32 RESEVED6 ;
+ //-------------------------7--------------------
+ volatile u32 DMA_CCR7 ;
+ volatile u32 DMA_CNDTR7 ;
+ volatile u32 DMA_CPAR7 ;
+ volatile u32 DMA_CMAR7 ;
+ volatile u32 RESEVED7 ;
+ //---------------------------------------------
 
-}DMA_REG_DEF_t;
-*/
-
+ }DMA_REG_DEF_t;
+ */
 
 typedef struct {
 	u16 DMA_EN :1;
@@ -192,24 +191,74 @@ typedef struct {
 	u16 DMA_PL :2;
 	u16 DMA_MEM2MEM :1;
 	u16 DMA_RESERV :1;
-	u16 DMA_RESERVval ;
+	u16 DMA_RESERVval;
 } DMAConf_t;
 typedef struct {
 	volatile DMAConf_t DMA_CCR;
 	volatile u32 DMA_CNDTR;
 	volatile u32 DMA_CPAR;
-	volatile u32 DMA_CMAR ;
-	volatile u32 RESEVED ;
-}
-DMA_CH_REG_t ;
+	volatile u32 DMA_CMAR;
+	volatile u32 RESEVED;
+} DMA_CH_REG_t;
 typedef struct {
 
-	volatile u32 DMA_ISR ;
-	volatile u32 DMA_IFCR ;
+	volatile u32 DMA_ISR;
+	volatile u32 DMA_IFCR;
 
 	DMA_CH_REG_t DMA_CH[DMA_CONF_SIZE];
-}DMA_REG_DEF_t;
+} DMA_REG_DEF_t;
 
 #define DMA ((DMA_REG_DEF_t*)DMA_u32BASE_ADDRESS)
+/*************************************************************/
+/*******************UART Registers****************************/
+/*************************************************************/
+
+#define UART1_u32BASE_ADDRESS  0x40013800
+#define UART2_u32BASE_ADDRESS  0x40004400
+#define UART3_u32BASE_ADDRESS  0x40004800
+#define UART4_u32BASE_ADDRESS  0x40004C00
+#define UART5_u32BASE_ADDRESS  0x40005000
+
+typedef struct {
+
+	u32 USART_SR;
+	u32 USART_DR;
+	u32 USART_BRR;
+	u32 USART_CR1;
+	u32 USART_CR2;
+	u32 USART_CR3;
+	u32 USART_GTPR;
+
+} UART_REG_DEF_t;
+
+#define UART1 ((UART_REG_DEF_t*)UART1_u32BASE_ADDRESS)
+#define UART2 ((UART_REG_DEF_t*)UART2_u32BASE_ADDRESS)
+#define UART3 ((UART_REG_DEF_t*)UART3_u32BASE_ADDRESS)
+#define UART4 ((UART_REG_DEF_t*)UART4_u32BASE_ADDRESS)
+#define UART5 ((UART_REG_DEF_t*)UART5_u32BASE_ADDRESS)
+/*************************************************************/
+/*******************SPI Registers****************************/
+/*************************************************************/
+
+#define SPI1_u32BASE_ADDRESS  0x40013000
+#define SPI2_u32BASE_ADDRESS  0x40003800
+#define SPI3_u32BASE_ADDRESS  0x40003C00
+
+
+typedef struct {
+
+	u32 USART_SR;
+	u32 USART_DR;
+	u32 USART_BRR;
+	u32 USART_CR1;
+	u32 USART_CR2;
+	u32 USART_CR3;
+	u32 USART_GTPR;
+
+} SPI_REG_DEF_t;
+
+#define SPI1 ((SPI_REG_DEF_t*)SPI1_u32BASE_ADDRESS)
+#define SPI2 ((SPI_REG_DEF_t*)USPI2_u32BASE_ADDRESS)
+
 
 #endif //_STMF103C8_MMAP_H_

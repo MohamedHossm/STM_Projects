@@ -10,7 +10,7 @@
 
 const   GPIO_Conf_t  GPIO_Conf_ARR [PINTOTAL] ={
 
-		{Pin_A0      ,GPIO_u8INPUT_FLOATING },
+		{Pin_A0      ,GPIO_u8OUT_PUSH_PULL_2MHZ },
 		{Pin_A1      ,GPIO_u8OUT_PUSH_PULL_2MHZ },
 		{Pin_A2      ,GPIO_u8OUT_PUSH_PULL_2MHZ },
 		{Pin_A3      ,GPIO_u8OUT_PUSH_PULL_2MHZ },
@@ -19,8 +19,8 @@ const   GPIO_Conf_t  GPIO_Conf_ARR [PINTOTAL] ={
 		{Pin_A6      ,GPIO_u8OUT_PUSH_PULL_2MHZ },
 		{Pin_A7      ,GPIO_u8OUT_PUSH_PULL_2MHZ },
 		{Pin_A8      ,GPIO_u8OUT_PUSH_PULL_2MHZ },
-		{Pin_A9      ,GPIO_u8OUT_PUSH_PULL_2MHZ },
-		{Pin_A10     ,GPIO_u8OUT_PUSH_PULL_2MHZ },
+		{Pin_A9      ,GPIO_u8OUT_AF_DRAIN_2MHZ },
+		{Pin_A10     ,GPIO_u8INPUT_FLOATING },
 		{Pin_A11     ,GPIO_u8OUT_PUSH_PULL_2MHZ },
 		{Pin_A12     ,GPIO_u8OUT_PUSH_PULL_2MHZ },
 		{Pin_A13     ,GPIO_u8OUT_PUSH_PULL_2MHZ },
@@ -33,11 +33,11 @@ const   GPIO_Conf_t  GPIO_Conf_ARR [PINTOTAL] ={
 		{Pin_B4      ,GPIO_u8OUT_PUSH_PULL_2MHZ },
 		{Pin_B5      ,GPIO_u8OUT_PUSH_PULL_2MHZ },
 		{Pin_B6      ,GPIO_u8OUT_PUSH_PULL_2MHZ },
-		{Pin_B7      ,GPIO_u8INPUT_PULL_UP_DOWN },
+		{Pin_B7      ,GPIO_u8OUT_PUSH_PULL_2MHZ },
 		{Pin_B8      ,GPIO_u8OUT_PUSH_PULL_2MHZ },
 		{Pin_B9      ,GPIO_u8OUT_PUSH_PULL_2MHZ },
 		{Pin_B10     ,GPIO_u8OUT_PUSH_PULL_2MHZ },
-		{Pin_B11     ,GPIO_u8OUT_PUSH_PULL_2MHZ },
+		{Pin_B11     ,GPIO_u8INPUT_PULL_UP_DOWN },
 		{Pin_B12     ,GPIO_u8OUT_PUSH_PULL_2MHZ },
 		{Pin_B13     ,GPIO_u8OUT_PUSH_PULL_2MHZ },
 		{Pin_B14     ,GPIO_u8OUT_PUSH_PULL_2MHZ },

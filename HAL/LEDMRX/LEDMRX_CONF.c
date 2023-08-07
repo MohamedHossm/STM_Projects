@@ -74,7 +74,7 @@
  const GPIO_u8PIN_t LEDMTRLedsRows [LEDS_COLNUM] = { Pin_B12, Pin_B13, Pin_A8, Pin_A9, Pin_A10,
 		Pin_A11, Pin_A12, Pin_B6  };
 
- const GPIO_u8PIN_t LEDMTRLedsColms[LEDS_ROWNUM] = {Pin_A0, Pin_A1, Pin_A2, Pin_A3, Pin_A4,
+ const GPIO_u8PIN_t LEDMTRLedsColms[LEDS_ROWNUM] = {Pin_A13, Pin_A1, Pin_A2, Pin_A3, Pin_A4,
 		Pin_A5, Pin_A6, Pin_A7};
 /*
  const GPIO_u8PIN_t LEDMTRLedsRows [LEDS_COLNUM] = {Pin_A0, Pin_A1, Pin_A2, Pin_A3, Pin_A4,
@@ -82,3 +82,4 @@
  const GPIO_u8PIN_t LEDMTRLedsColms[LEDS_ROWNUM] = { Pin_B0, Pin_B1, Pin_B5, Pin_B6, Pin_B7,
 		Pin_B8, Pin_B9, Pin_B10 };
 */
+
