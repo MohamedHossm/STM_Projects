@@ -11,7 +11,9 @@
 #include "UART_Conf.h"
 #include "UART_Interface.h"
 #include "UART_Pivate.h"
-
+/*********************************************************/
+#include "GPIO_Interface.h"  //debuge
+/**********************************************************/
 
 static volatile u8 UART1_u8GlobalFrame[UART_FRAME_SIZE] = { 0 };
 static volatile u8 UART1_u8index = 0;
