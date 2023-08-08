@@ -19,5 +19,9 @@ typedef enum {
 
 }SPI_Prescaler_t;
 
+
+void SPI2_vInit(void) ;
+Error_t SPI2_u8Send (u8 copy_u8SendData  );
+Error_t SPI2_u8SendRecive (u8 copy_u8SendData ,u8* Ptr_u8ReciveData );
 #endif //SPI_INTERFACE_H_
 

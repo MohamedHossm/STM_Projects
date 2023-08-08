@@ -32,19 +32,18 @@
 /* -----options-------
  * SPI_u8_8_BITMODE
  * SPI_u8_16_BITMODE
- * *
 */
 #define SPI_BITMODE     SPI_u8_8_BITMODE
 
 /* -----options-------
  * SPI_u8_lSB_MODE
  * SPI_u8_MSB_MODE
- * */
+ */
 
-#define SPI_MODE_SEND   SPI_u8_lSB_MODE
+#define SPI_MODE_SEND   SPI_u8_MSB_MODE
 
 /* -----options-------
- *  SPI_F_2  = 0 ,
+ *  SPI_F_2  = 000 ,
 	SPI_F_4 ,
 	SPI_F_8 ,
 	SPI_F_16 ,

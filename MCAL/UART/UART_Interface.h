@@ -13,14 +13,16 @@
 #define UART1_ENDFRAM '#'
 
 void UART1_voidInit() ;
-Error_t UART1_u8SendByteBasyw8(u8 data ) ;
-Error_t UART1_u8RecieveByteBasyw8(u8* data) ;
+Error_t UART1_u8SendByteBusyw8(u8 data ) ;
+Error_t UART1_u8RecieveByteBusyw8(u8* data) ;
 
 Error_t UART1_u8SendByteAsynch(u8 data) ;
 Error_t UART1_u8RecieveByteAsynch(void) ;
 
-Error_t UART1_u8SendStringBasyW8(char* data) ;
-Error_t UART1_u8RecieveStringBasyW8(u8* data) ;
+Error_t UART1_u8SendStringBusyW8(char* data) ;
+Error_t UART1_u8RecieveStringBusyW8(u8* data) ;
+
+Error_t UART1_u8RecieveByte(volatile u8 *data);
 
 Error_t UART1_u8EnterruptEnRX(void);
 Error_t UART1_u8EnterruptDsRX(void);

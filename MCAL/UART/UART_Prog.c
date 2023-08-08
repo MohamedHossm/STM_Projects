@@ -54,25 +54,25 @@ void UART1_voidInit() {
 	UART1->USART_SR = 0;
 }
 
-Error_t UART1_u8SendByteBasyw8(u8 data) {
+Error_t UART1_u8SendByteBusyw8(u8 data) {
 	Error_t local_u8Status = OK;
 	while (!READ_BIT(UART1->USART_SR, TXE))
 		; // txe ---- time out is needed
 	UART1->USART_DR = data;
 	return local_u8Status;
 }
-Error_t UART1_u8RecieveByteBasyw8(u8 *data) {
+Error_t UART1_u8RecieveByteBusyw8(u8 *data) {
 	Error_t local_u8Status = OK;
 	while (!READ_BIT(UART1->USART_SR, RXNE)); // RXne ---- time out is needed
 	*data = UART1->USART_DR;
 	return local_u8Status;
 }
 
-Error_t UART1_u8SendStringBasyW8(char *data) {
+Error_t UART1_u8SendStringBusyW8(char *data) {
 	Error_t local_u8Status = OK;
 
 	for (u8 local_index = 0; data[local_index]; local_index++) {
-		UART1_u8SendByteBasyw8(data[local_index]);
+		UART1_u8SendByteBusyw8(data[local_index]);
 	}
 	return local_u8Status;
 }
@@ -88,10 +88,10 @@ Error_t UART1_u8SendNum(u32 copy_u32num) {
 	Error_t local_u8Status = OK;
 
 	u8 *localptr = (u8*) (&copy_u32num);
-	UART1_u8SendByteBasyw8(localptr[0]);
-	UART1_u8SendByteBasyw8(localptr[1]);
-	UART1_u8SendByteBasyw8(localptr[2]);
-	UART1_u8SendByteBasyw8(localptr[3]);
+	UART1_u8SendByteBusyw8(localptr[0]);
+	UART1_u8SendByteBusyw8(localptr[1]);
+	UART1_u8SendByteBusyw8(localptr[2]);
+	UART1_u8SendByteBusyw8(localptr[3]);
 
 	return local_u8Status;
 
@@ -106,7 +106,7 @@ Error_t UART1_u8SendNumString(u32 copy_u32num) {
 	}
 	index--;
 	for (; index >= 0; index--) {
-		UART1_u8SendByteBasyw8(local_String[index]);
+		UART1_u8SendByteBusyw8(local_String[index]);
 	}
 
 	return local_u8Status;
@@ -161,7 +161,7 @@ void UART1_GETdata(u8 *UART1ptrStr, u16 *UART1ptrNum) {
 }
 
 
-Error_t UART1_u8RecieveStringBasyW8(u8 *data);
+Error_t UART1_u8RecieveStringBusyW8(u8 *data);
 Error_t UART1_u8EnterruptEnRX(void) {
 	Error_t local_u8Status = OK;
 	SET_BIT(UART1->USART_CR1, RXNEIE);

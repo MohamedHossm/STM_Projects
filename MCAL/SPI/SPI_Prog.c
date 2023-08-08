@@ -12,7 +12,7 @@
 #include "SPI_Interface.h"
 #include "SPI_Pivate.h"
 
-void SPI2_vInit() {
+void SPI2_vInit(void) {
 
 #if SPI_MODE == SPI_u8MASTER
 	// set master
@@ -29,14 +29,50 @@ void SPI2_vInit() {
 
 	// set CK pr
 #if SPI_CK_PR == SPI_u8CK_PR_LOW
-
+	CLR_BIT(SPI2->SPI_CR1, CPOL);
 #elif SPI_CK_PR == SPI_u8CK_PR_HIGH
-
+	SET_BIT(SPI2->SPI_CR1, CPOL);
 #endif
+
 	// set Ck phase
+#if SPI_CK_PH == SPI_u8CK_PH_LOW
+	CLR_BIT(SPI2->SPI_CR1, CPHA);
+#elif SPI_CK_PH == SPI_u8CK_PH_HIGH
+	SET_BIT(SPI2->SPI_CR1, CPHA);
+#endif
+
 	// set mode 8bits , 16 bits
+#if SPI_BITMODE == SPI_u8_8_BITMODE
+	CLR_BIT(SPI2->SPI_CR1, DFF);
+#elif SPI_BITMODE == SPI_u8_16_BITMODE
+	SET_BIT(SPI2->SPI_CR1, DFF);
+#endif
+
 	// set LSB , MSB
-
+#if SPI_MODE_SEND == SPI_u8_MSB_MODE
+	CLR_BIT(SPI2->SPI_CR1, LSBFIRST);
+#elif SPI_MODE_SEND == SPI_u8_lSB_MODE
+	SET_BIT(SPI2->SPI_CR1, LSBFIRST);
+#endif
 	// enable spi
+	SET_BIT(SPI2->SPI_CR1, SPE);
+}
 
+Error_t SPI2_u8SendRecive (u8 copy_u8SendData ,u8* Ptr_u8ReciveData ){
+	Error_t local_u8Status = OK ;
+
+	SPI2->SPI_DR = copy_u8SendData ;
+	while(READ_BIT(SPI2->SPI_SR,BSY))  ;
+	*Ptr_u8ReciveData =SPI2->SPI_DR;
+
+	return local_u8Status ;
+}
+Error_t SPI2_u8Send (u8 copy_u8SendData  ){
+	Error_t local_u8Status = OK ;
+
+	SPI2->SPI_DR = copy_u8SendData ;
+	while(READ_BIT(SPI2->SPI_SR,BSY))  ;
+
+
+	return local_u8Status ;
 }
