@@ -34,8 +34,8 @@ Error_t ledMatrix_SPI_u8SendData(u8 Copy_u8LedMatrixAddress,
 	Error_t Local_u8Status = OK;
 
 	GPIO_u8SetPinV_ID(Global_u8ControlPin, LOW);
-	SPI2_u8Send(Copy_u8LedMatrixAddress);
-	SPI2_u8Send(Copy_u8LedMatrixData);
+	SPI2_u8SendBusyW8(Copy_u8LedMatrixAddress);
+	SPI2_u8SendBusyW8(Copy_u8LedMatrixData);
 	GPIO_u8SetPinV_ID(Global_u8ControlPin, HIGH);
 
 	return Local_u8Status;

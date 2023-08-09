@@ -21,7 +21,7 @@
 
 #define SPI_u8_lSB_MODE  55
 #define SPI_u8_MSB_MODE  21
-
+//SPI_CR1
 #define MSTR 		2
 #define BR0  		3
 #define BR1	 		4
@@ -32,5 +32,12 @@
 #define LSBFIRST 	7
 #define SPE      	6
 
+//SPI_SR
 #define BSY         7
+#define TXE         1
+#define RXNE        0
+
+//spi cr2
+#define TXEIE       7
+#define RXNEIE      6
 #endif //SPI_PRIVATE_H_

@@ -12,6 +12,9 @@
 #include "SPI_Interface.h"
 #include "SPI_Pivate.h"
 
+static void (*SPI2_PtrCallBackTX)(void) = NULLPTR;
+static void (*SPI2_PtrCallBackRX)(void) = NULLPTR;
+
 void SPI2_vInit(void) {
 
 #if SPI_MODE == SPI_u8MASTER
@@ -58,21 +61,90 @@ void SPI2_vInit(void) {
 	SET_BIT(SPI2->SPI_CR1, SPE);
 }
 
-Error_t SPI2_u8SendRecive (u8 copy_u8SendData ,u8* Ptr_u8ReciveData ){
-	Error_t local_u8Status = OK ;
+Error_t SPI2_u8SendRecive(u8 copy_u8SendData, u8 *Ptr_u8ReciveData) {
+	Error_t local_u8Status = OK;
 
-	SPI2->SPI_DR = copy_u8SendData ;
-	while(READ_BIT(SPI2->SPI_SR,BSY))  ;
-	*Ptr_u8ReciveData =SPI2->SPI_DR;
+	SPI2->SPI_DR = copy_u8SendData;
+	while (READ_BIT(SPI2->SPI_SR, BSY))
+		;
+	*Ptr_u8ReciveData = SPI2->SPI_DR;
 
-	return local_u8Status ;
+	return local_u8Status;
 }
-Error_t SPI2_u8Send (u8 copy_u8SendData  ){
-	Error_t local_u8Status = OK ;
 
-	SPI2->SPI_DR = copy_u8SendData ;
-	while(READ_BIT(SPI2->SPI_SR,BSY))  ;
+Error_t SPI2_u8SendBusyW8(u8 copy_u8SendData) {
+	Error_t local_u8Status = OK;
 
+	SPI2->SPI_DR = copy_u8SendData;
+	while (READ_BIT(SPI2->SPI_SR, BSY))
+		;
 
-	return local_u8Status ;
+	return local_u8Status;
+}
+Error_t SPI2_u8RecieveBusyW8(u8 *PTR_u8RecData) {
+	Error_t local_u8Status = OK;
+	if (PTR_u8RecData != NULLPTR) {
+
+	while (!READ_BIT(SPI2->SPI_SR,RXNE)){}
+		*PTR_u8RecData = SPI2->SPI_DR;
+	} else {
+		local_u8Status = NOK;
+	}
+	return local_u8Status;
+}
+
+Error_t SPI2_u8RecieveNoBlock(u8 *PTR_u8RecData) {
+	Error_t local_u8Status = OK;
+	if (PTR_u8RecData != NULLPTR) {
+		*PTR_u8RecData = SPI2->SPI_DR;
+	} else {
+		local_u8Status = NOK;
+	}
+	return local_u8Status;
+
+}
+Error_t SPI2_u8CallBack_IRQ_TX(void (*CopyFun)(void)) {
+	Error_t local_u8Status = OK;
+	if (*CopyFun != NULLPTR) {
+
+		SPI2_PtrCallBackTX = CopyFun;
+	} else {
+		local_u8Status = NOK;
+	}
+	return local_u8Status;
+}
+Error_t SPI2_u8CallBack_IRQ_RX(void (*CopyFun)(void)) {
+	Error_t local_u8Status = OK;
+	if (*CopyFun != NULLPTR) {
+		SPI2_PtrCallBackRX = CopyFun;
+
+	} else {
+		local_u8Status = NOK;
+	}
+	return local_u8Status;
+}
+
+void SPI2_vInterruptEnRX() {
+	SET_BIT(SPI2->SPI_CR2, RXNEIE);
+}
+void SPI2_vInterruptDSRX() {
+	CLR_BIT(SPI2->SPI_CR2, RXNEIE);
+
+}
+void SPI2_vInterruptEnTX() {
+	SET_BIT(SPI2->SPI_CR2, TXEIE);
+}
+void SPI2_vInterruptDSTX() {
+	CLR_BIT(SPI2->SPI_CR2, TXEIE);
+}
+
+void SPI2_IRQHandler(void){
+
+	if (READ_BIT(SPI2->SPI_SR,TXE)){
+		//SPI2_PtrCallBackTX() ;
+	}
+	if(READ_BIT(SPI2->SPI_SR,RXNE)) {
+		//SPI2_PtrCallBackRX() ;
+	}
+
 }
