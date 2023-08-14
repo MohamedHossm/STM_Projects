@@ -113,6 +113,14 @@ else
 return Local_enErrorState;
 }
 
+#define  RCC_ADC_LOCATION 14
+Error_t RCC_vSetADC_CLK(RCC_ADC_PRESCALER Copy_u8ADCSelectionOption){
+	Error_t Local_u8State=OK;
+	Copy_u8ADCSelectionOption = Copy_u8ADCSelectionOption& 0b11 ;
+		RCC->RCC_CFGR &= ~((0b11)<< RCC_ADC_LOCATION);
+		RCC->RCC_CFGR |= Copy_u8ADCSelectionOption << RCC_ADC_LOCATION ;
 
+	return Local_u8State;
 
+}
 

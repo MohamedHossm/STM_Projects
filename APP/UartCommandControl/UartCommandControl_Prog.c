@@ -9,6 +9,7 @@
 
 #include "GPIO_Interface.h"
 #include "SPI_Interface.h"
+#include "Delay.h"
 #include "SYSTICK_Interface.h"
 #include "ledMatrix_SPI_Interface.h"
 #include "UART_Interface.h"
@@ -32,40 +33,41 @@ u8 LedMtrixPatterns[LEDMXPATTERNSIZE][ledMatrix_SPI_COLS] = { { 0, 102, 255,
 };
 // on my hard ware
 /*
-GPIO_u8PIN_t LEDARR[LEDARRSIZE] = { Pin_A0, Pin_A1, Pin_A2, Pin_A3, Pin_A4,
-		Pin_A5, Pin_A6, Pin_A7 };
-*/
+ GPIO_u8PIN_t LEDARR[LEDARRSIZE] = { Pin_A0, Pin_A1, Pin_A2, Pin_A3, Pin_A4,
+ Pin_A5, Pin_A6, Pin_A7 };
+ */
 // on simu
- GPIO_u8PIN_t LEDARR[LEDARRSIZE] = { Pin_B0, Pin_B1, Pin_B2, Pin_B3, Pin_B4,
- Pin_B5, Pin_B6, Pin_B7 };
-
+GPIO_u8PIN_t LEDARR[LEDARRSIZE] = { Pin_B0, Pin_B1, Pin_B2, Pin_B3, Pin_B4,
+		Pin_B5, Pin_B6, Pin_B7 };
 
 void UartCommandControl_vIint() {
 	/*
-	RCC_voidInitSystemClock();
+	 RCC_voidInitSystemClock();
 
-	RCC_voidEnablePeriphralCLK(APB2_IOPAEN);
-	RCC_voidEnablePeriphralCLK(APB2_IOPBEN);
-	RCC_voidEnablePeriphralCLK(APB2_IOPCEN);
-	// enable uart clock
-	RCC_voidEnablePeriphralCLK(APB2_USART1EN);
-	// enable spi2 clock
-	RCC_voidEnablePeriphralCLK(APB1_SPI2EN);
-	//gpoi init
-	GPIO_u8Init();
+	 RCC_voidEnablePeriphralCLK(APB2_IOPAEN);
+	 RCC_voidEnablePeriphralCLK(APB2_IOPBEN);
+	 RCC_voidEnablePeriphralCLK(APB2_IOPCEN);
+	 // enable uart clock
+	 RCC_voidEnablePeriphralCLK(APB2_USART1EN);
+	 // enable spi2 clock
+	 RCC_voidEnablePeriphralCLK(APB1_SPI2EN);
+	 //gpoi init
+	 GPIO_u8Init();
 
-	// enable uart interrupt nvic
-	NVIC_u8Set_EN_IRQ(INTERRUPT_USART1);
+	 // enable uart interrupt nvic
+	 NVIC_u8Set_EN_IRQ(INTERRUPT_USART1);
 
-	UartCommandControl_vIint();
-	//uart init
-	UART1_voidInit();
-	UART1_u8EnterruptEnRX();
-	//UART1_u8SendStringBusyW8("data");
-	SPI2_vInit();
-	*/
+	 UartCommandControl_vIint();
+	 //uart init
+	 UART1_voidInit();
+	 UART1_u8EnterruptEnRX();
+	 //UART1_u8SendStringBusyW8("data");
+	 SPI2_vInit();
+	 */
 	ledMatrix_SPI_vInit(LEDMTRIXLOAD);
+	GPIO_u8SetPinV_ID(AVRSSPIN, HIGH);
 }
+
 void UartCommandControl_vRunnable(void) {
 	UART1_Runnable();
 	if (UART1_IsDataReady()) {
@@ -76,7 +78,12 @@ void UartCommandControl_vRunnable(void) {
 
 			FunDataBase[UART_SellectedFunction].Sellected_FUN(uartNUMReturn);
 		} else {
-			//do nothing
+			//send the string to Avr via spi
+			SpiFunctionSend(uartStringReturn, uartNUMReturn);
+
+			UART1_u8SendStringBusyW8((char*)uartStringReturn);
+
+			UART1_u8SendStringBusyW8("  done  ");
 		}
 
 	} else {
@@ -85,12 +92,31 @@ void UartCommandControl_vRunnable(void) {
 	//STK_u8SetBusyWait(5000);
 
 }
+
+Error_t SpiFunctionSend(u8 *PTR_String, u32 Copy_number) {
+	Error_t Local_u8Status = OK;
+	GPIO_u8SetPinV_ID(AVRSSPIN, LOW); // spi slave select
+	//Delay(500);
+	SPI2_u8SendString(PTR_String);
+	SPI2_u8SendBusyW8(' ');
+	SPI2_u8SendNumString(Copy_number);
+
+	SPI2_u8SendBusyW8('#');                //frame end
+	SPI2_u8SendBusyW8('#');                //frame end
+
+
+	GPIO_u8SetPinV_ID(AVRSSPIN, HIGH); // dis spi slave select
+
+	return Local_u8Status;
+}
 Error_t LedM_u8Display(u8 Copy_u8PatternID) {
 	Error_t Local_u8Status = OK;
 	Copy_u8PatternID--;
 	if (Copy_u8PatternID < LEDMXPATTERNSIZE) {
 		ledMatrix_SPI_u8SendPattern(LedMtrixPatterns[Copy_u8PatternID]);
-
+		//------------------------------------------------------
+			UART1_u8SendStringBusyW8(" ledM done ");             // debug
+			//-------------------------------------------------------
 	} else {
 		Local_u8Status = NOK;
 	}
@@ -102,7 +128,7 @@ Error_t LEDARR_u8DisplayON(u8 Copy_u8LedID) {
 	if (Copy_u8LedID < LEDARRSIZE) {
 		GPIO_u8SetPinV_ID(LEDARR[Copy_u8LedID], HIGH);
 		//------------------------------------------------------
-		UART1_u8SendStringBusyW8("led on");             // debug
+		UART1_u8SendStringBusyW8(" led on ");             // debug
 		//-------------------------------------------------------
 	} else {
 		Local_u8Status = NOK;
@@ -118,7 +144,7 @@ Error_t LEDARR_u8DisplayOFF(u8 Copy_u8LedID) {
 	if (Copy_u8LedID < LEDARRSIZE) {
 		GPIO_u8SetPinV_ID(LEDARR[Copy_u8LedID], LOW);
 		//------------------------------------------------------
-		UART1_u8SendStringBusyW8("led off");         // debug
+		UART1_u8SendStringBusyW8(" led off ");         // debug
 		//-------------------------------------------------------
 
 	} else {

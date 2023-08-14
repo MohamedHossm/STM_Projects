@@ -26,7 +26,8 @@ Error_t SPI2_u8SendBusyW8(u8 copy_u8SendData) ;
 Error_t SPI2_u8SendRecive (u8 copy_u8SendData ,u8* Ptr_u8ReciveData );
 Error_t SPI2_u8RecieveBusyW8(u8 *PTR_u8RecData);
 Error_t SPI2_u8RecieveNoBlock(u8 *PTR_u8RecData);
-
+Error_t SPI2_u8SendNumString(u32 copy_u32num);
+Error_t SPI2_u8SendString(u8 *PTR_u8StringData);
 //interrupt functions
 Error_t SPI2_u8CallBack_IRQ_TX(void (*CopyFun)(void));
 Error_t SPI2_u8CallBack_IRQ_RX(void (*CopyFun)(void)) ;

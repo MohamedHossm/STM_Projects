@@ -244,7 +244,6 @@ typedef struct {
 #define SPI2_u32BASE_ADDRESS  0x40003800
 #define SPI3_u32BASE_ADDRESS  0x40003C00
 
-
 typedef struct {
 
 	u32 SPI_CR1;
@@ -262,5 +261,35 @@ typedef struct {
 #define SPI1 ((SPI_REG_DEF_t*)SPI1_u32BASE_ADDRESS)
 #define SPI2 ((SPI_REG_DEF_t*)SPI2_u32BASE_ADDRESS)
 
+/*************************************************************/
+/*******************ADC Registers****************************/
+/*************************************************************/
+
+#define ADC1_u32BASE_ADDRESS  0x40012400
+#define ADC2_u32BASE_ADDRESS  0x40012800
+#define ADC3_u32BASE_ADDRESS  0x40013C00
+// size of regesters
+
+#define  ADC_CRSIZE    2
+#define  ADC_SMPRSIZE  2
+#define  ADC_JOFRSIZE  4
+#define  ADC_SQRSIZE   3
+#define  ADC_JDRSIZE   4
+
+typedef struct {
+	u32 ADC_SR;
+	u32 ADC_CR[ADC_CRSIZE];
+	u32 ADC_SMPR[ADC_SMPRSIZE];
+	u32 ADC_JOFR[ADC_JOFRSIZE] ;
+	u32 ADC_HTR;
+	u32 ADC_LTR;
+	u32 ADC_SQR[ADC_SQRSIZE];
+	u32 ADC_JSQR;
+	u32 ADC_JDR[ADC_JDRSIZE];
+	u32 ADC_DR  ;
+} ADC_REG_DEF_t;
+
+#define ADC1 ((ADC_REG_DEF_t*)ADC1_u32BASE_ADDRESS)
+#define ADC2 ((ADC_REG_DEF_t*)ADC2_u32BASE_ADDRESS)
 
 #endif //_STMF103C8_MMAP_H_

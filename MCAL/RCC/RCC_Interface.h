@@ -70,10 +70,20 @@ typedef enum
 
 }PeriphralBusId_t;
 
+typedef enum {
+	RCC_ADC_CLK_D_2 =0 ,
+	RCC_ADC_CLK_D_4 ,
+	RCC_ADC_CLK_D_6,
+	RCC_ADC_CLK_D_8
+}RCC_ADC_PRESCALER ;
 
 #define RCC_u8AHB  1
 #define RCC_u8APB2 2
 #define RCC_u8APB1 3
+
+#define  RCC_ADC_LOCATION 15
+
+Error_t RCC_vSetADC_CLK(RCC_ADC_PRESCALER Copy_u8ADCSelectionOption);
 
 void RCC_voidInitSystemClock(void);
 Error_t RCC_voidEnablePeriphralCLK(PeriphralBusId_t Copy_enPeriphralId);

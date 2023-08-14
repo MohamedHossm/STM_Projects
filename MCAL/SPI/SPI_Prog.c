@@ -75,9 +75,9 @@ Error_t SPI2_u8SendRecive(u8 copy_u8SendData, u8 *Ptr_u8ReciveData) {
 Error_t SPI2_u8SendBusyW8(u8 copy_u8SendData) {
 	Error_t local_u8Status = OK;
 
+	while (READ_BIT(SPI2->SPI_SR, BSY));
 	SPI2->SPI_DR = copy_u8SendData;
-	while (READ_BIT(SPI2->SPI_SR, BSY))
-		;
+
 
 	return local_u8Status;
 }
@@ -103,6 +103,32 @@ Error_t SPI2_u8RecieveNoBlock(u8 *PTR_u8RecData) {
 	return local_u8Status;
 
 }
+Error_t SPI2_u8SendString(u8 *PTR_u8StringData){
+	Error_t local_u8Status = OK;
+
+	for(u8 index = 0 ; PTR_u8StringData[index] ; index ++ ){
+	SPI2_u8SendBusyW8(PTR_u8StringData[index]);
+}
+	return local_u8Status;
+
+}
+Error_t SPI2_u8SendNumString(u32 copy_u32num) {
+	Error_t local_u8Status = OK;
+	u8 local_String[10];
+	s8 index;
+	for (index = 0; copy_u32num; index++) {
+		local_String[index] = copy_u32num % 10 + '0';
+		copy_u32num /= 10;
+	}
+	index--;
+	for (; index >= 0; index--) {
+		SPI2_u8SendBusyW8(local_String[index]);
+	}
+
+	return local_u8Status;
+
+}
+
 Error_t SPI2_u8CallBack_IRQ_TX(void (*CopyFun)(void)) {
 	Error_t local_u8Status = OK;
 	if (*CopyFun != NULLPTR) {
