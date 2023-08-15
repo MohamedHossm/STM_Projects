@@ -6,6 +6,8 @@
 ((((s64)ADC-X1)*((s64)Y2 - Y1))/((s64)X2 - X1 ))+(s64)Y1 
 
 
+#define  TRUE    1
+#define  FALSE   0
 
 #define  READ_BIT(reg,bit)    ((reg>>bit)&1)
 #define  SET_BIT(reg,bit)     (reg=reg|(1<<bit))

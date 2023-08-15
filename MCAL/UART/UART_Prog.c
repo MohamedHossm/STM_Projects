@@ -59,12 +59,14 @@ Error_t UART1_u8SendByteBusyw8(u8 data) {
 	while (!READ_BIT(UART1->USART_SR, TXE))
 		; // txe ---- time out is needed
 	UART1->USART_DR = data;
+	CLR_BIT(UART1->USART_SR, TXE);
 	return local_u8Status;
 }
 Error_t UART1_u8RecieveByteBusyw8(u8 *data) {
 	Error_t local_u8Status = OK;
 	while (!READ_BIT(UART1->USART_SR, RXNE)); // RXne ---- time out is needed
 	*data = UART1->USART_DR;
+	CLR_BIT(UART1->USART_SR, RXNE);
 	return local_u8Status;
 }
 
