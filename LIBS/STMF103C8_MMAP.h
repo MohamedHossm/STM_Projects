@@ -280,16 +280,40 @@ typedef struct {
 	u32 ADC_SR;
 	u32 ADC_CR[ADC_CRSIZE];
 	u32 ADC_SMPR[ADC_SMPRSIZE];
-	u32 ADC_JOFR[ADC_JOFRSIZE] ;
+	u32 ADC_JOFR[ADC_JOFRSIZE];
 	u32 ADC_HTR;
 	u32 ADC_LTR;
 	u32 ADC_SQR[ADC_SQRSIZE];
 	u32 ADC_JSQR;
 	u32 ADC_JDR[ADC_JDRSIZE];
-	u32 ADC_DR  ;
+	u32 ADC_DR;
 } ADC_REG_DEF_t;
 
 #define ADC1 ((ADC_REG_DEF_t*)ADC1_u32BASE_ADDRESS)
 #define ADC2 ((ADC_REG_DEF_t*)ADC2_u32BASE_ADDRESS)
+
+/*************************************************************/
+/*******************I2C Registers****************************/
+/*************************************************************/
+
+#define I2C1_u32BASE_ADDRESS  0x40005400
+#define I2C2_u32BASE_ADDRESS  0x40005800
+
+typedef struct {
+
+	volatile u32 I2C_CR1;
+	volatile u32 I2C_CR2;
+	volatile u32 I2C_OAR1;
+	volatile u32 I2C_OAR2;
+	volatile u32 I2C_DR;
+	volatile u32 I2C_SR1;
+	volatile u32 I2C_SR2;
+	volatile u32 I2C_CCR;
+	volatile u32 I2C_TRISE;
+
+} I2C_REG_DEF_t;
+
+#define I2C1 ((I2C_REG_DEF_t*)I2C1_u32BASE_ADDRESS)
+#define I2C2 ((I2C_REG_DEF_t*)I2C2_u32BASE_ADDRESS)
 
 #endif //_STMF103C8_MMAP_H_

@@ -102,6 +102,7 @@ Error_t UART1_u8SendNumString(u32 copy_u32num) {
 	Error_t local_u8Status = OK;
 	u8 local_String[10];
 	s8 index;
+	if (copy_u32num!=0){
 	for (index = 0; copy_u32num; index++) {
 		local_String[index] = copy_u32num % 10 + '0';
 		copy_u32num /= 10;
@@ -109,6 +110,9 @@ Error_t UART1_u8SendNumString(u32 copy_u32num) {
 	index--;
 	for (; index >= 0; index--) {
 		UART1_u8SendByteBusyw8(local_String[index]);
+	}
+	}else {
+		UART1_u8SendByteBusyw8('0');
 	}
 
 	return local_u8Status;
