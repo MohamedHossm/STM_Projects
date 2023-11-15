@@ -4,15 +4,16 @@
 /* Version         : 1.0                                                              */
 /* SW              : UART                                                             */
 /*****************************************************************************/
-#include "STD_TYPES.h"
-#include "BIT_MATH.h"
-#include "STMF103C8_MMAP.h"
+#include "../LIBS/STD_TYPES.h"
+#include "../LIBS/BIT_MATH.h"
+#include "../LIBS/STMF103C8_MMAP.h"
 
 #include "UART_Conf.h"
 #include "UART_Interface.h"
 #include "UART_Pivate.h"
 /*********************************************************/
-#include "GPIO_Interface.h"  //debuge
+//#include "GPIO_Interface.h"  //debuge
+//#include "../Systick/SYSTICK_Interface.h" // debuge
 /**********************************************************/
 
 static volatile u8 UART1_u8GlobalFrame[UART_FRAME_SIZE] = { 0 };
@@ -24,11 +25,11 @@ static u16 UART1_MUNRX = 0;
 
 static u8 UART1_DataReady = 0;
 
+static void (*GlobalRX)(void) = {NULLPTR };
 /*
  void (*UART1_CallBack[UART_CALLBACK_SIZE])(void) =
  {	NULLPTR, NULLPTR,NULLPTR,NULLPTR };
  */
-
 
 void UART1_voidInit() {
 
@@ -39,7 +40,7 @@ void UART1_voidInit() {
 //no parity
 	CLR_BIT(UART1->USART_CR1, PCE);
 // 1 start 8bit data n stop
-	CLR_BIT(UART1->USART_CR1, M );
+	CLR_BIT(UART1->USART_CR1, M);
 // 1 stop bit
 	CLR_BIT(UART1->USART_CR2, StOP_0);
 	CLR_BIT(UART1->USART_CR2, StOP_1);
@@ -64,7 +65,8 @@ Error_t UART1_u8SendByteBusyw8(u8 data) {
 }
 Error_t UART1_u8RecieveByteBusyw8(u8 *data) {
 	Error_t local_u8Status = OK;
-	while (!READ_BIT(UART1->USART_SR, RXNE)); // RXne ---- time out is needed
+	while (!READ_BIT(UART1->USART_SR, RXNE))
+		; // RXne ---- time out is needed
 	*data = UART1->USART_DR;
 	CLR_BIT(UART1->USART_SR, RXNE);
 	return local_u8Status;
@@ -77,6 +79,17 @@ Error_t UART1_u8SendStringBusyW8(char *data) {
 		UART1_u8SendByteBusyw8(data[local_index]);
 	}
 	return local_u8Status;
+}
+
+Error_t UART1_u8SendArrayBusyW8(u8 *data , u8 Copy_Size){
+	Error_t local_u8Status = OK;
+
+	for (u8 local_index = 0;local_index< Copy_Size; local_index++) {
+			UART1_u8SendByteBusyw8(data[local_index]);
+		}
+
+	return local_u8Status;
+
 }
 
 Error_t UART1_u8RecieveByte(volatile u8 *data) {
@@ -102,16 +115,16 @@ Error_t UART1_u8SendNumString(u32 copy_u32num) {
 	Error_t local_u8Status = OK;
 	u8 local_String[10];
 	s8 index;
-	if (copy_u32num!=0){
-	for (index = 0; copy_u32num; index++) {
-		local_String[index] = copy_u32num % 10 + '0';
-		copy_u32num /= 10;
-	}
-	index--;
-	for (; index >= 0; index--) {
-		UART1_u8SendByteBusyw8(local_String[index]);
-	}
-	}else {
+	if (copy_u32num != 0) {
+		for (index = 0; copy_u32num; index++) {
+			local_String[index] = copy_u32num % 10 + '0';
+			copy_u32num /= 10;
+		}
+		index--;
+		for (; index >= 0; index--) {
+			UART1_u8SendByteBusyw8(local_String[index]);
+		}
+	} else {
 		UART1_u8SendByteBusyw8('0');
 	}
 
@@ -166,7 +179,6 @@ void UART1_GETdata(u8 *UART1ptrStr, u16 *UART1ptrNum) {
 	UART1_DataReady = 0;
 }
 
-
 Error_t UART1_u8RecieveStringBusyW8(u8 *data);
 Error_t UART1_u8EnterruptEnRX(void) {
 	Error_t local_u8Status = OK;
@@ -178,9 +190,13 @@ Error_t UART1_u8EnterruptDsRX(void) {
 	CLR_BIT(UART1->USART_CR1, RXNEIE);
 	return local_u8Status;
 }
-Error_t UART1_u8EnterruptCallBackRX(void) {
+Error_t UART1_u8EnterruptCallBackRX(void (*Rx)(void)) {
 	Error_t local_u8Status = OK;
-
+	if (Rx != NULLPTR) {
+		GlobalRX = Rx;
+	} else {
+		local_u8Status = NULL_PTR;
+	}
 	return local_u8Status;
 }
 
@@ -201,18 +217,196 @@ Error_t UART1_u8EnterruptCallBackTX(void) {
 }
 
 void USART1_IRQHandler(void) {
-
+	/*
+	 if (READ_BIT(UART1->USART_SR, RXNE)) {
+	 UART1_u8RecieveByte(&UART1_u8GlobalFrame[UART1_u8index]); //-
+	 if (UART1_u8GlobalFrame[UART1_u8index] == UART1_ENDFRAM
+	 || UART1_u8index == UART_FRAME_SIZE - 1) {
+	 UART1_u8EndFrameRecieved = 1;
+	 }
+	 if (UART1_u8index < UART_FRAME_SIZE - 1) {
+	 UART1_u8index++;
+	 } else {
+	 // do nothing
+	 }
+	 }
+	 */
 	if (READ_BIT(UART1->USART_SR, RXNE)) {
-		UART1_u8RecieveByte(&UART1_u8GlobalFrame[UART1_u8index]); //-
-		if (UART1_u8GlobalFrame[UART1_u8index] == UART1_ENDFRAM
-				|| UART1_u8index == UART_FRAME_SIZE - 1) {
-			UART1_u8EndFrameRecieved = 1;
+		if (GlobalRX) {
+			GlobalRX();
+
 		}
-		if (UART1_u8index < UART_FRAME_SIZE - 1) {
-			UART1_u8index++;
-		} else {
-			// do nothing
-		}
+		CLR_BIT(UART1->USART_SR, RXNE);
+
 	}
+
 }
+//*****************************************************************************************************************************************************/
+
+/*********************************************************/
+//#include "GPIO_Interface.h"  //debuge
+//#include "../Systick/SYSTICK_Interface.h" // debuge
+/**********************************************************/
+
+static volatile u8 UART2_u8GlobalFrame[UART_FRAME_SIZE] = { 0 };
+static volatile u8 UART2_u8index = 0;
+static volatile u8 UART2_u8EndFrameRecieved = 0;
+/*
+static char UART2_StringRX[UART_STR_SIZE] = { 0 };
+static u16 UART2_MUNRX = 0;
+
+static u8 UART2_DataReady = 0;
+
+static void (*UART2GlobalRX)(void) = {NULLPTR };
+*/
+/*
+ void (*UART2_CallBack[UART_CALLBACK_SIZE])(void) =
+ {	NULLPTR, NULLPTR,NULLPTR,NULLPTR };
+ */
+
+void UART2_voidInit() {
+
+	/******** baud rate **********/
+	UART2->USART_BRR = BAUDRATE;
+
+	/******** frame format *******/
+//no parity
+	CLR_BIT(UART2->USART_CR1, PCE);
+// 1 start 8bit data n stop
+	CLR_BIT(UART2->USART_CR1, M);
+// 1 stop bit
+	CLR_BIT(UART2->USART_CR2, StOP_0);
+	CLR_BIT(UART2->USART_CR2, StOP_1);
+
+	/******** enable RX **********/
+	SET_BIT(UART2->USART_CR1, RE);
+	/******** enable TX **********/
+	SET_BIT(UART2->USART_CR1, TE);
+	/*********UART enable ********/
+	SET_BIT(UART2->USART_CR1, UE);
+	// clr status reg
+	UART2->USART_SR = 0;
+}
+
+Error_t UART2_u8SendByteBusyw8(u8 data) {
+	Error_t local_u8Status = OK;
+	while (!READ_BIT(UART2->USART_SR, TXE))
+		; // txe ---- time out is needed
+	UART2->USART_DR = data;
+	CLR_BIT(UART2->USART_SR, TXE);
+	return local_u8Status;
+}
+Error_t UART2_u8RecieveByteBusyw8(u8 *data) {
+	Error_t local_u8Status = OK;
+	while (!READ_BIT(UART2->USART_SR, RXNE))
+		; // RXne ---- time out is needed
+	*data = UART2->USART_DR;
+	CLR_BIT(UART2->USART_SR, RXNE);
+	return local_u8Status;
+}
+
+Error_t UART2_u8SendStringBusyW8(char *data) {
+	Error_t local_u8Status = OK;
+
+	for (u8 local_index = 0; data[local_index]; local_index++) {
+		UART2_u8SendByteBusyw8(data[local_index]);
+	}
+	return local_u8Status;
+}
+
+Error_t UART2_u8SendArrayBusyW8(u8 *data , u8 Copy_Size){
+	Error_t local_u8Status = OK;
+
+	for (u8 local_index = 0;local_index< Copy_Size; local_index++) {
+			UART2_u8SendByteBusyw8(data[local_index]);
+		}
+
+	return local_u8Status;
+
+}
+
+Error_t UART2_u8RecieveByte(volatile u8 *data) {
+	Error_t local_u8Status = OK;
+// return DR reg
+	*data = UART2->USART_DR;
+	return local_u8Status;
+
+}
+Error_t UART2_u8SendNum(u32 copy_u32num) {
+	Error_t local_u8Status = OK;
+
+	u8 *localptr = (u8*) (&copy_u32num);
+	UART2_u8SendByteBusyw8(localptr[0]);
+	UART2_u8SendByteBusyw8(localptr[1]);
+	UART2_u8SendByteBusyw8(localptr[2]);
+	UART2_u8SendByteBusyw8(localptr[3]);
+
+	return local_u8Status;
+
+}
+Error_t UART2_u8SendNumString(u32 copy_u32num) {
+	Error_t local_u8Status = OK;
+	u8 local_String[10];
+	s8 index;
+	if (copy_u32num != 0) {
+		for (index = 0; copy_u32num; index++) {
+			local_String[index] = copy_u32num % 10 + '0';
+			copy_u32num /= 10;
+		}
+		index--;
+		for (; index >= 0; index--) {
+			UART2_u8SendByteBusyw8(local_String[index]);
+		}
+	} else {
+		UART2_u8SendByteBusyw8('0');
+	}
+
+	return local_u8Status;
+
+}
+
+
+
+
+Error_t UART2_u8RecieveStringBusyW8(u8 *data);
+Error_t UART2_u8EnterruptEnRX(void) {
+	Error_t local_u8Status = OK;
+	SET_BIT(UART2->USART_CR1, RXNEIE);
+	return local_u8Status;
+}
+Error_t UART2_u8EnterruptDsRX(void) {
+	Error_t local_u8Status = OK;
+	CLR_BIT(UART2->USART_CR1, RXNEIE);
+	return local_u8Status;
+}
+Error_t UART2_u8EnterruptCallBackRX(void (*Rx)(void)) {
+	Error_t local_u8Status = OK;
+	if (Rx != NULLPTR) {
+		GlobalRX = Rx;
+	} else {
+		local_u8Status = NULL_PTR;
+	}
+	return local_u8Status;
+}
+
+Error_t UART2_u8EnterruptEnTX(void) {
+	Error_t local_u8Status = OK;
+
+	return local_u8Status;
+}
+Error_t UART2_u8EnterruptDsTX(void) {
+	Error_t local_u8Status = OK;
+
+	return local_u8Status;
+}
+Error_t UART2_u8EnterruptCallBackTX(void) {
+	Error_t local_u8Status = OK;
+
+	return local_u8Status;
+}
+
+
+
+
+
 
